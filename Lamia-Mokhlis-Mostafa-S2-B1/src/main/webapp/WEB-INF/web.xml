@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+
+    <display-name>Lamia-Mokhlis-Mostafa-S2-B1</display-name>
+
+    <!-- Page d'accueil (index) -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+        <welcome-file>default.html</welcome-file>
+        <welcome-file>default.jsp</welcome-file>
+        <welcome-file>default.htm</welcome-file>
+    </welcome-file-list>
+
+    <!-- Déclaration et mapping du Servlet pour la gestion des projets -->
+    <servlet>
+        <servlet-name>GestionProjetServlet</servlet-name>
+        <servlet-class>com.project.controller.GestionProjetServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GestionProjetServlet</servlet-name>
+        <url-pattern>/projets</url-pattern>
+    </servlet-mapping>
+
+    <!-- Déclaration et mapping du Servlet pour la gestion des tâches -->
+    <servlet>
+        <servlet-name>GestionTacheServlet</servlet-name>
+        <servlet-class>com.project.controller.GestionTacheServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GestionTacheServlet</servlet-name>
+        <url-pattern>/taches</url-pattern>
+    </servlet-mapping>
+
+    <!-- Déclaration et mapping du Servlet pour la gestion des équipes -->
+    <servlet>
+        <servlet-name>GestionEquipeServlet</servlet-name>
+        <servlet-class>com.project.controller.GestionEquipeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GestionEquipeServlet</servlet-name>
+        <url-pattern>/equipes</url-pattern>
+    </servlet-mapping>
+
+    <!-- Déclaration et mapping du Servlet pour la gestion des membres -->
+    <servlet>
+        <servlet-name>GestionMembreServlet</servlet-name>
+        <servlet-class>com.project.controller.MemberController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GestionMembreServlet</servlet-name>
+        <url-pattern>/membres</url-pattern>
+    </servlet-mapping>
+
+    <!-- Configuration du contexte -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/applicationContext.xml</param-value>
+    </context-param>
+
+    <!-- Session timeout en minutes -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+</web-app>
