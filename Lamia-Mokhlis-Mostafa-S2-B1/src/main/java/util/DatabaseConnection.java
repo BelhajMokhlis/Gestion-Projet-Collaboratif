@@ -9,10 +9,6 @@ import java.util.Properties;
 
 public class DatabaseConnection {
 
-	public static void main(String[] args){
-		System.out.println(getInstance());
-	}
-
 	private static DatabaseConnection instance;
 	private Connection connection;
 	private String url;
@@ -24,7 +20,6 @@ public class DatabaseConnection {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			this.connection = DriverManager.getConnection(url, username, password);
-			System.out.println("connected!");
 		} catch (ClassNotFoundException e) {
 			System.err.println("MySQL JDBC Driver not found.");
 			e.printStackTrace();
@@ -60,7 +55,6 @@ public class DatabaseConnection {
 		}
 		return instance;
 	}
-
 
 	public void closeConnection() {
 		if (connection != null) {
