@@ -1,4 +1,6 @@
 package repository.impl;
 
-public class TaskRepositoryImpl {
+import repository.Interface.TaskRepository;
+
+public class TaskRepositoryImpl implements TaskRepository {
 }
