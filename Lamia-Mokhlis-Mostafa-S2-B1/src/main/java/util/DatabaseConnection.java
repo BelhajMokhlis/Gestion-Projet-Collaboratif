@@ -20,7 +20,7 @@ public class DatabaseConnection {
             System.err.println("MySQL JDBC Driver not found.");
             e.printStackTrace();
         } catch (SQLException e) {
-            System.err.println("Erreur de connexion à la base de données. " + e.getMessage());
+            System.err.println("error connecting to database : " + e.getMessage());
         }
     }
 
