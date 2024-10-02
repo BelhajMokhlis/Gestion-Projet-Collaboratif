@@ -3,6 +3,7 @@ package model;
 import model.enums.TaskPriority;
 import model.enums.TaskStatus;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Task {
@@ -11,13 +12,13 @@ public class Task {
     private String description;
     private TaskPriority priority;
     private TaskStatus status;
-    private Date creationDate;
-    private Date dueDate;
+    private LocalDate creationDate;
+    private LocalDate dueDate;
 
     public Task() {
     }
 
-    public Task(int taskID, String title, String description, TaskPriority priority, TaskStatus status, Date creationDate, Date dueDate) {
+    public Task(int taskID, String title, String description, TaskPriority priority, TaskStatus status, LocalDate creationDate, LocalDate dueDate) {
         this.taskID = taskID;
         this.title = title;
         this.description = description;
@@ -67,19 +68,19 @@ public class Task {
         this.status = status;
     }
 
-    public Date getCreationDate() {
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
 
-    public Date getDueDate() {
+    public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Date dueDate) {
+    public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
 }
