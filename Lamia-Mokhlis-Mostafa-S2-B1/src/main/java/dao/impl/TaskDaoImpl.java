@@ -15,15 +15,14 @@ public class TaskDaoImpl implements TaskDAO {
 
     @Override
     public void create(Task task) {
-        String query = "INSERT INTO tasks (taskID, title, description, priority, status, creationDate, dueDate) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO tasks (title, description, priority, status, creationDate, dueDate) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, task.getTaskID());
-            ps.setString(2, task.getTitle());
-            ps.setString(3, task.getDescription());
-            ps.setObject(4, task.getPriority().toString(), Types.OTHER);
-            ps.setObject(5, task.getStatus().toString(), Types.OTHER);
-            ps.setDate(6, new java.sql.Date(task.getCreationDate().getTime()));
-            ps.setDate(7, new java.sql.Date(task.getDueDate().getTime()));
+            ps.setString(1, task.getTitle());
+            ps.setString(2, task.getDescription());
+            ps.setString(3, task.getPriority().name());
+            ps.setString(4, task.getStatus().name());
+            ps.setDate(5, Date.valueOf(task.getCreationDate()));
+            ps.setDate(6, Date.valueOf(task.getDueDate()));
 
             ps.executeUpdate();
             System.out.println("Task created successfully!");
@@ -33,23 +32,21 @@ public class TaskDaoImpl implements TaskDAO {
     }
 
     @Override
-    public Task read(int id) {
+    public Task read(int taskID) {
         String query = "SELECT * FROM tasks WHERE taskID = ?";
         Task task = null;
         try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, id);
+            ps.setInt(1, taskID);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 task = new Task();
                 task.setTaskID(rs.getInt("taskID"));
                 task.setTitle(rs.getString("title"));
                 task.setDescription(rs.getString("description"));
-                TaskPriority priority = TaskPriority.fromString(rs.getString("priority"));
-                task.setPriority(priority);
-                TaskStatus status = TaskStatus.fromString(rs.getString("status"));
-                task.setStatus(status);
-                task.setCreationDate(rs.getDate("creationDate"));
-                task.setDueDate(rs.getDate("dueDate"));
+                task.setPriority(TaskPriority.valueOf(rs.getString("priority")));
+                task.setStatus(TaskStatus.valueOf(rs.getString("status")));
+                task.setCreationDate(rs.getDate("creationDate").toLocalDate());
+                task.setDueDate(rs.getDate("dueDate").toLocalDate());
             }
             System.out.println("Task retrieved successfully!");
         } catch (SQLException e) {
@@ -66,8 +63,8 @@ public class TaskDaoImpl implements TaskDAO {
             ps.setString(2, task.getDescription());
             ps.setString(3, task.getPriority().name());
             ps.setString(4, task.getStatus().name());
-            ps.setDate(5, new java.sql.Date(task.getCreationDate().getTime()));
-            ps.setDate(6, new java.sql.Date(task.getDueDate().getTime()));
+            ps.setDate(5, Date.valueOf(task.getCreationDate()));
+            ps.setDate(6, Date.valueOf(task.getDueDate()));
             ps.setInt(7, task.getTaskID());
 
             ps.executeUpdate();
@@ -78,10 +75,10 @@ public class TaskDaoImpl implements TaskDAO {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int taskID) {
         String query = "DELETE FROM tasks WHERE taskID = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, id);
+            ps.setInt(1, taskID);
             ps.executeUpdate();
             System.out.println("Task deleted successfully!");
         } catch (SQLException e) {
@@ -100,13 +97,10 @@ public class TaskDaoImpl implements TaskDAO {
                 task.setTaskID(rs.getInt("taskID"));
                 task.setTitle(rs.getString("title"));
                 task.setDescription(rs.getString("description"));
-                TaskPriority priority = TaskPriority.fromString(rs.getString("priority"));
-                task.setPriority(priority);
-                TaskStatus status = TaskStatus.fromString(rs.getString("status"));
-                task.setStatus(status);
-                task.setCreationDate(rs.getDate("creationDate"));
-                task.setDueDate(rs.getDate("dueDate"));
-
+                task.setPriority(TaskPriority.valueOf(rs.getString("priority")));
+                task.setStatus(TaskStatus.valueOf(rs.getString("status")));
+                task.setCreationDate(rs.getDate("creationDate").toLocalDate());
+                task.setDueDate(rs.getDate("dueDate").toLocalDate());
                 tasks.add(task);
             }
             System.out.println("Retrieved all tasks successfully!");
