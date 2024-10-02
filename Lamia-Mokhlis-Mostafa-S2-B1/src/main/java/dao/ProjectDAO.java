@@ -1,10 +1,14 @@
 package dao;
 
+import java.util.List;
+
 import model.Project;
 
 public interface ProjectDAO {
-
-	boolean create(Project project);
-    boolean update(Project project);
-    boolean delete(int id);
+	
+	void create(Project project);
+    void update(Project project);
+    void delete(int id);
+    Project findById(int id);
+    List<Project> findAll();
 }

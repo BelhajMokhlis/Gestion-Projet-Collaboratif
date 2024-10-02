@@ -1,6 +1,6 @@
 package model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import model.enums.ProjectStatus;
 
@@ -9,14 +9,17 @@ public class Project {
 	private int id;
     private String name;
     private String description;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private ProjectStatus status;
     private int teamId;
     
-    
-    
-	public Project( String name, String description, Date startDate, Date endDate, ProjectStatus status,int teamId) {
+
+	public Project() {
+	
+	}
+	
+	public Project( String name, String description, LocalDate startDate, LocalDate endDate, ProjectStatus status,int teamId) {
 		this.name = name;
 		this.description = description;
 		this.startDate = startDate;
@@ -42,16 +45,16 @@ public class Project {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Date getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(Date startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
-	public Date getEndDate() {
+	public LocalDate getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(Date endDate) {
+	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
 	public ProjectStatus getStatus() {
