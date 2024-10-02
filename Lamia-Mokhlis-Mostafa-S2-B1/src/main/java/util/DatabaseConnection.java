@@ -28,6 +28,7 @@ public class DatabaseConnection {
 		}
 	}
 
+
 	private void loadConfig() {
 		Properties prop = new Properties();
 		try (InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties")) {
@@ -67,3 +68,4 @@ public class DatabaseConnection {
 		}
 	}
 }
+
