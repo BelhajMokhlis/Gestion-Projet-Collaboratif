@@ -1,4 +1,4 @@
-package repository;
+package repository.impl;
 
 import java.util.List;
 import dao.ProjectDAO;
