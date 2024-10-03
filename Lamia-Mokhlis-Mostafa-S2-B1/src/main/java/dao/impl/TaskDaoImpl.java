@@ -1,6 +1,8 @@
 package dao.impl;
 
 import dao.Interface.TaskDAO;
+import dao.ProjectDAOImpl;
+import model.Project;
 import model.Task;
 import model.enums.TaskPriority;
 import model.enums.TaskStatus;
@@ -33,14 +35,14 @@ public class TaskDaoImpl implements TaskDAO {
 
     @Override
     public Task read(int taskID) {
-        String query = "SELECT * FROM task WHERE taskID = ?";
+        String query = "SELECT * FROM task WHERE id = ?";
         Task task = null;
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, taskID);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 task = new Task();
-                task.setTaskID(rs.getInt("taskID"));
+                task.setTaskID(rs.getInt("id"));
                 task.setTitle(rs.getString("title"));
                 task.setDescription(rs.getString("description"));
                 task.setPriority(TaskPriority.valueOf(rs.getString("priority")));
@@ -57,7 +59,7 @@ public class TaskDaoImpl implements TaskDAO {
 
     @Override
     public void update(Task task) {
-        String query = "UPDATE task SET title = ?, description = ?, priority = ?, status = ?, creationDate = ?, dueDate = ? WHERE taskID = ?";
+        String query = "UPDATE task SET title = ?, description = ?, priority = ?, status = ?, creationDate = ?, dueDate = ? WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, task.getTitle());
             ps.setString(2, task.getDescription());
@@ -76,7 +78,7 @@ public class TaskDaoImpl implements TaskDAO {
 
     @Override
     public void delete(int taskID) {
-        String query = "DELETE FROM task WHERE taskID = ?";
+        String query = "DELETE FROM task WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, taskID);
             ps.executeUpdate();
@@ -94,13 +96,19 @@ public class TaskDaoImpl implements TaskDAO {
              ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
                 Task task = new Task();
-                task.setTaskID(rs.getInt("taskID"));
+                task.setTaskID(rs.getInt("id"));
                 task.setTitle(rs.getString("title"));
                 task.setDescription(rs.getString("description"));
                 task.setPriority(TaskPriority.valueOf(rs.getString("priority")));
                 task.setStatus(TaskStatus.valueOf(rs.getString("status")));
                 task.setCreationDate(rs.getDate("creationDate").toLocalDate());
                 task.setDueDate(rs.getDate("dueDate").toLocalDate());
+
+                int projectID = rs.getInt("project_id");
+                ProjectDAOImpl projectDao = new ProjectDAOImpl();
+                Project project = projectDao.findById(projectID);
+                task.setProject(project);
+
                 tasks.add(task);
             }
             System.out.println("Retrieved all tasks successfully!");
