@@ -1,4 +1,4 @@
-package repository.interface;
+package repository.Interface;
 
 import java.util.List;
 

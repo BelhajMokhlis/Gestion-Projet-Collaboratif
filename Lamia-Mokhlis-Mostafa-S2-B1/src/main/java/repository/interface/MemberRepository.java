@@ -1,5 +1,7 @@
-package repository.interface;
+package repository.Interface;
 
-public class MemberRepository {
+public interface MemberRepository {
+
+    
 
 }
