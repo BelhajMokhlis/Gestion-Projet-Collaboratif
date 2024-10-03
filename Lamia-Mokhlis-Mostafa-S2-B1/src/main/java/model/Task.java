@@ -4,7 +4,6 @@ import model.enums.TaskPriority;
 import model.enums.TaskStatus;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Task {
     private int taskID;
@@ -82,6 +81,19 @@ public class Task {
 
     public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "taskID=" + taskID +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", priority=" + priority +
+                ", status=" + status +
+                ", creationDate=" + creationDate +
+                ", dueDate=" + dueDate +
+                '}';
     }
 }
 

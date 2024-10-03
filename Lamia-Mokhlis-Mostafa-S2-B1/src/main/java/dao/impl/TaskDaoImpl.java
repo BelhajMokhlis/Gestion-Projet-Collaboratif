@@ -15,7 +15,7 @@ public class TaskDaoImpl implements TaskDAO {
 
     @Override
     public void create(Task task) {
-        String query = "INSERT INTO tasks (title, description, priority, status, creationDate, dueDate) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO task (title, description, priority, status, creationDate, dueDate) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, task.getTitle());
             ps.setString(2, task.getDescription());
@@ -33,7 +33,7 @@ public class TaskDaoImpl implements TaskDAO {
 
     @Override
     public Task read(int taskID) {
-        String query = "SELECT * FROM tasks WHERE taskID = ?";
+        String query = "SELECT * FROM task WHERE taskID = ?";
         Task task = null;
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, taskID);
@@ -57,7 +57,7 @@ public class TaskDaoImpl implements TaskDAO {
 
     @Override
     public void update(Task task) {
-        String query = "UPDATE tasks SET title = ?, description = ?, priority = ?, status = ?, creationDate = ?, dueDate = ? WHERE taskID = ?";
+        String query = "UPDATE task SET title = ?, description = ?, priority = ?, status = ?, creationDate = ?, dueDate = ? WHERE taskID = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, task.getTitle());
             ps.setString(2, task.getDescription());
@@ -76,7 +76,7 @@ public class TaskDaoImpl implements TaskDAO {
 
     @Override
     public void delete(int taskID) {
-        String query = "DELETE FROM tasks WHERE taskID = ?";
+        String query = "DELETE FROM task WHERE taskID = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, taskID);
             ps.executeUpdate();
@@ -89,7 +89,7 @@ public class TaskDaoImpl implements TaskDAO {
     @Override
     public List<Task> getAll() {
         List<Task> tasks = new ArrayList<>();
-        String query = "SELECT * FROM tasks";
+        String query = "SELECT * FROM task";
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
