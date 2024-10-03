@@ -8,6 +8,7 @@ import service.TaskService;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -69,30 +70,39 @@ public class TaskServlet extends HttpServlet {
 
     private void insertTask(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         String title = request.getParameter("title");
         String description = request.getParameter("description");
         String priorityStr = request.getParameter("priority");
         String dueDateStr = request.getParameter("dueDate");
 
         TaskPriority priority = TaskPriority.valueOf(priorityStr.toUpperCase());
-        TaskStatus status = TaskStatus.TO_DO;
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        LocalDate dueDate = LocalDate.parse(dueDateStr, formatter);
+
+        LocalDate dueDate;
+        try {
+            dueDate = LocalDate.parse(dueDateStr, formatter);
+        } catch (DateTimeParseException e) {
+            request.setAttribute("errorMessage", "Invalid due date format. Please use MM/DD/YYYY.");
+            request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
+            return;
+        }
 
         Task newTask = new Task();
         newTask.setTitle(title);
         newTask.setDescription(description);
         newTask.setPriority(priority);
-        newTask.setCreationDate(LocalDate.now());
         newTask.setDueDate(dueDate);
-        newTask.setStatus(status);
+        newTask.setCreationDate(LocalDate.now());
 
-        taskService.createTask(newTask);
-
-        response.sendRedirect(request.getContextPath() + "/tasks");
+        try {
+            taskService.createTask(newTask);
+            response.sendRedirect(request.getContextPath() + "/tasks");
+        } catch (IllegalArgumentException e) {
+            request.setAttribute("errorMessage", e.getMessage());
+            request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
+        }
     }
+
 
     private void updateTask(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
