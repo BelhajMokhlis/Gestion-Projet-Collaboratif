@@ -42,9 +42,9 @@
     </form>
 </div>
 
-<form action="<c:url value='/Lamia-Mokhlis-Mostafa-S2-B1/tasks' />" method="get">
+<form action="${pageContext.request.contextPath}/tasks" method="get">
     <input type="hidden" name="action" value="list">
-    <input type="hidden" name="projectID" value="1"> <!-- static project ID for now -->
+    <input type="hidden" name="projectID" value="6"> <!-- static project ID for now -->
     <button type="submit" class="btn btn-primary">View Project Tasks</button>
 </form>
 

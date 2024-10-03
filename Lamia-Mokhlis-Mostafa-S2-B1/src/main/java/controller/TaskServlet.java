@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -123,9 +124,9 @@ public class TaskServlet extends HttpServlet {
     }
 
     private void listTasks(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        int projectID = Integer.parseInt(request.getParameter("projectID"));
+        int projectID = Integer.parseInt(request.getParameter("projectID"));
 
-        List<Task> tasks = taskService.getProjectTasks(1);
+        List<Task> tasks = taskService.getProjectTasks(projectID);
 
         // Set tasks as a request attribute to be accessed in JSP
         request.setAttribute("tasks", tasks);

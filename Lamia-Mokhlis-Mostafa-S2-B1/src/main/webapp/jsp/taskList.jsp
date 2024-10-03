@@ -5,9 +5,34 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Project Tasks</title>
 </head>
 <body>
-
+<body>
+    <div class="container">
+        <h1>Project Tasks</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Task ID</th>
+                    <th>Task title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Due Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="task" items="${tasks}">
+                    <tr>
+                        <td>${task.taskID}</td>
+                        <td>${task.title}</td>
+                        <td>${task.description}</td>
+                        <td>${task.status}</td>
+                        <td>${task.dueDate}</td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
