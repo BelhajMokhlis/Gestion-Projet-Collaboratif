@@ -56,7 +56,7 @@ public class TaskService {
             throw new IllegalArgumentException("Due date cannot be null.");
         }
 
-        // Check if due date is after today
+        // Check if due date is
         if (task.getDueDate().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Due date must be in the future.");
         }

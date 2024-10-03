@@ -76,6 +76,7 @@ public class TaskServlet extends HttpServlet {
         String dueDateStr = request.getParameter("dueDate");
 
         TaskPriority priority = TaskPriority.valueOf(priorityStr.toUpperCase());
+        TaskStatus status = TaskStatus.TO_DO;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
         LocalDate dueDate;
@@ -83,7 +84,7 @@ public class TaskServlet extends HttpServlet {
             dueDate = LocalDate.parse(dueDateStr, formatter);
         } catch (DateTimeParseException e) {
             request.setAttribute("errorMessage", "Invalid due date format. Please use MM/DD/YYYY.");
-            request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
+            request.getRequestDispatcher("/jsp/errorPage.jsp").forward(request, response);
             return;
         }
 
@@ -92,14 +93,15 @@ public class TaskServlet extends HttpServlet {
         newTask.setDescription(description);
         newTask.setPriority(priority);
         newTask.setDueDate(dueDate);
+        newTask.setStatus(status);
         newTask.setCreationDate(LocalDate.now());
 
         try {
             taskService.createTask(newTask);
-            response.sendRedirect(request.getContextPath() + "/tasks");
+            response.sendRedirect(request.getContextPath() + "/jsp/tasks.jsp");
         } catch (IllegalArgumentException e) {
             request.setAttribute("errorMessage", e.getMessage());
-            request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
+            request.getRequestDispatcher("/jsp/errorPage.jsp").forward(request, response);
         }
     }
 
