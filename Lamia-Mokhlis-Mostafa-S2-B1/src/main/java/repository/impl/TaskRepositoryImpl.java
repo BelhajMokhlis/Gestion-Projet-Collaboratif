@@ -5,9 +5,14 @@ import model.Task;
 import repository.Interface.TaskRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public class TaskRepositoryImpl implements TaskRepository {
-    private final TaskDaoImpl taskDao = new TaskDaoImpl();
+    private final TaskDaoImpl taskDao;
+
+    public TaskRepositoryImpl() {
+        this.taskDao = new TaskDaoImpl();
+    }
 
     @Override
     public void create(Task task) {
@@ -32,6 +37,9 @@ public class TaskRepositoryImpl implements TaskRepository {
     @Override
     public void delete(int taskID) {
         taskDao.delete(taskID);
+    }
+
+    public Optional<List<Task>> getAllProjectTasks(int projectID){
     }
 }
 
