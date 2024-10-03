@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -120,10 +121,18 @@ public class TaskServlet extends HttpServlet {
             throws ServletException, IOException {
 
     }
-    
-    private void listTasks(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
 
+    private void listTasks(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        int projectID = Integer.parseInt(request.getParameter("projectID"));
+
+        List<Task> tasks = taskService.getProjectTasks(1);
+
+        // Set tasks as a request attribute to be accessed in JSP
+        request.setAttribute("tasks", tasks);
+
+        // Forward to JSP for rendering
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/taskList.jsp");
+        dispatcher.forward(request, response);
     }
 
 }

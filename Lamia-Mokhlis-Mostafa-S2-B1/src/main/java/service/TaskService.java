@@ -6,6 +6,7 @@ import repository.impl.TaskRepositoryImpl;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public class TaskService {
     private final TaskRepository taskRepository;
@@ -33,6 +34,14 @@ public class TaskService {
 
     public void deleteTask(int taskID) {
         taskRepository.delete(taskID);
+    }
+
+    public List<Task> getProjectTasks(int projectID){
+        if (taskRepository.getAllProjectTasks(projectID).isPresent()){
+            return taskRepository.getAllProjectTasks(projectID).get();
+        }else {
+            return null;
+        }
     }
 
     private void validateTaskInput(Task task) {

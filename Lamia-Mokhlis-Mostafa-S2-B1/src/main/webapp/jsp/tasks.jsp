@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,6 +41,12 @@
         <button type="submit" class="btn btn-primary">Add New Task!</button>
     </form>
 </div>
+
+<form action="<c:url value='/Lamia-Mokhlis-Mostafa-S2-B1/tasks' />" method="get">
+    <input type="hidden" name="action" value="list">
+    <input type="hidden" name="projectID" value="1"> <!-- static project ID for now -->
+    <button type="submit" class="btn btn-primary">View Project Tasks</button>
+</form>
 
 <!-- Bootstrap JS dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

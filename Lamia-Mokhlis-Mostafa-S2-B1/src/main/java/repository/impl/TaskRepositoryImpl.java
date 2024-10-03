@@ -6,6 +6,7 @@ import repository.Interface.TaskRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class TaskRepositoryImpl implements TaskRepository {
     private final TaskDaoImpl taskDao;
@@ -39,7 +40,11 @@ public class TaskRepositoryImpl implements TaskRepository {
         taskDao.delete(taskID);
     }
 
+    @Override
     public Optional<List<Task>> getAllProjectTasks(int projectID){
+        return Optional.of(taskDao.getAll().stream()
+                .filter(task -> task.getProject().getId() == projectID)
+                .collect(Collectors.toList()));
     }
 }
 
