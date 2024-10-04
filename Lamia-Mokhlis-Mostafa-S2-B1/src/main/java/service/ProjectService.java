@@ -36,4 +36,12 @@ public class ProjectService {
     public List<Project> findAllProjects() {
         return projectRepository.findAll();
     }
+    
+    public int getTotalProjectsCount() {
+        return projectRepository.countAllProjects();
+    }
+    
+    public List<Project> getProjects(int page, int pageSize) {
+        return projectRepository.findProjectsWithPagination(page, pageSize);
+    }
 }

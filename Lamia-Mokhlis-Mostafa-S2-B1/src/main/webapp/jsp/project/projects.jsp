@@ -10,7 +10,7 @@
     <h1 class="mt-5">Project Management</h1>
     
     <!-- Link styled as a button to View Projects -->
-    <a href="${pageContext.request.contextPath}/ProjectServlet?action=list" class="btn btn-primary mt-3">View Projects</a>
+    <a href="${pageContext.request.contextPath}/ProjectsServlet?action=list" class="btn btn-primary mt-3">View Projects</a>
 
 </div>
 

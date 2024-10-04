@@ -18,7 +18,7 @@
     </c:if>
 
     <!-- Update Project Form -->
-    <form action="ProjectServlet" method="post">
+    <form action="ProjectsServlet?action=update" method="post">
         <input type="hidden" name="action" value="update"> <!-- Hidden field to trigger update action -->
         <input type="hidden" name="id" value="${project.id}"> <!-- Hidden field for project ID -->
 
@@ -42,17 +42,23 @@
             <input type="date" class="form-control" id="endDate" name="endDate" value="${project.endDate}" required>
         </div>
 
+       <div class="form-group">
+    <label for="status">Status:</label>
+    <select class="form-control" id="status" name="status" required>
+        <option value="IN_PREPARATION" ${project.status == 'IN_PREPARATION' ? 'selected' : ''}>In Preparation</option>
+        <option value="IN_PROGRESS" ${project.status == 'IN_PROGRESS' ? 'selected' : ''}>In Progress</option>
+        <option value="ON_HOLD" ${project.status == 'ON_HOLD' ? 'selected' : ''}>On Hold</option>
+        <option value="COMPLETED" ${project.status == 'COMPLETED' ? 'selected' : ''}>Completed</option>
+        <option value="CANCELED" ${project.status == 'CANCELED' ? 'selected' : ''}>Canceled</option>
+    </select>
+</div>
+  <!-- Team ID Input -->
         <div class="form-group">
-            <label for="status">Status:</label>
-            <select class="form-control" id="status" name="status" required>
-                <option value="Not Started" ${project.status == 'Not Started' ? 'selected' : ''}>Not Started</option>
-                <option value="In Progress" ${project.status == 'In Progress' ? 'selected' : ''}>In Progress</option>
-                <option value="Completed" ${project.status == 'Completed' ? 'selected' : ''}>Completed</option>
-            </select>
+            <label for="teamId">Team ID:</label>
+            <input type="number" class="form-control" id="teamId" name="teamId" value="${project.teamId}" required>
         </div>
-
         <button type="submit" class="btn btn-primary">Update Project</button>
-        <a href="ProjectServlet?action=list" class="btn btn-secondary">Cancel</a>
+        <a href="ProjectsServlet?action=list" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 

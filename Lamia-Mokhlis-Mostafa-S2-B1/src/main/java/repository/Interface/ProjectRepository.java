@@ -11,4 +11,6 @@ public interface ProjectRepository {
     void delete(int id);
     Project findById(int id);
     List<Project> findAll();
+   int countAllProjects();
+   List<Project> findProjectsWithPagination(int page, int pageSize);
 }
