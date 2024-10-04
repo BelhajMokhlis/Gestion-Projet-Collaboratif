@@ -1,9 +1,10 @@
-package dao;
+package dao.impl;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import dao.Interface.MemberDao;
 import model.Membre;
 import model.Team;
 import model.enums.MemberRole;

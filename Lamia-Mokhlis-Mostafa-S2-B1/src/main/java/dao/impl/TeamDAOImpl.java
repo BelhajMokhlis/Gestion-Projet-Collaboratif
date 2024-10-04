@@ -1,4 +1,4 @@
-package dao;
+package dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,6 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.util.List;
+
+import dao.Interface.MemberDao;
+import dao.Interface.TeamDAO;
+
 import java.util.ArrayList;
 
 import model.Team;
