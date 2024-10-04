@@ -2,8 +2,8 @@ package repository.impl;
 
 import java.util.List;
 
-import dao.MemberDao;
-import dao.MemberDaoImpl;
+import dao.Interface.MemberDao;
+import dao.impl.MemberDaoImpl;
 import model.Membre;
 import repository.Interface.MemberRepository;
 
