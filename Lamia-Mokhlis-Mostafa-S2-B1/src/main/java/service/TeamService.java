@@ -23,7 +23,11 @@ public class TeamService {
     public Team getTeam(int id) {
         return teamRepositoryImpl.getTeam(id);
     }
+
     public List<Team> getAllTeams() {
         return teamRepositoryImpl.getAllTeams();
     }
+
+  
+   
 }
