@@ -10,5 +10,6 @@ public interface MemberDao {
     boolean updateMember(Membre membre);
     Membre getMember(int id);
     List<Membre> getAllMembers();
+    List<Membre> getMembersByTeam(int teamId);
 
 }

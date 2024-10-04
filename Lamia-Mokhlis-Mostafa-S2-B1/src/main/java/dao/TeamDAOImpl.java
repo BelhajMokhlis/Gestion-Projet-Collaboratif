@@ -14,9 +14,11 @@ import util.DatabaseConnection;
 public class TeamDAOImpl implements TeamDAO {
 
     private Connection connection;
+    private MemberDao memberDao;
 
     public TeamDAOImpl() {
         this.connection = DatabaseConnection.getInstance().getConnection();
+        this.memberDao = new MemberDaoImpl();
     }
 
     @Override
@@ -67,6 +69,7 @@ public class TeamDAOImpl implements TeamDAO {
                     Team team = new Team();
                     team.setId(rs.getInt("id"));
                     team.setName(rs.getString("name"));
+                    team.setMembers(memberDao.getMembersByTeam(id));
                     return team;
                 }
             }
@@ -85,6 +88,7 @@ public class TeamDAOImpl implements TeamDAO {
                Team team = new Team();
                team.setId(rs.getInt("id"));
                team.setName(rs.getString("name"));
+               team.setMembers(memberDao.getMembersByTeam(rs.getInt("id")));
                teams.add(team); 
             }
         } catch (SQLException e) {

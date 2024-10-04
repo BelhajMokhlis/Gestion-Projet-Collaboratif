@@ -1,5 +1,5 @@
 package repository.Interface;
 
-public class TeamRepository {
+public interface TeamRepository {
 
 }

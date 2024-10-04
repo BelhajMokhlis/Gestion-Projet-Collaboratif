@@ -1,23 +1,32 @@
 package service;
 
 import model.Membre;
+import repository.impl.MemberRepositoryImpl;
 
 public class MemberService {
+    private MemberRepositoryImpl memberRepositoryImpl;
+
+    public MemberService() {
+        this.memberRepositoryImpl = new MemberRepositoryImpl();
+    }    
 
     public void addMember(Membre membre) {
-        // add the member to the team
+        memberRepositoryImpl.addMember(membre);
     }
     public void removeMember(Membre membre) {
-        // remove the member from the team
+        memberRepositoryImpl.removeMember(membre);
     }
     public void updateMember(Membre membre) {
-        // update the member
+        memberRepositoryImpl.updateMember(membre);
     }
     public void getMember(int id) {
-        // get the member by id
+        memberRepositoryImpl.getMember(id);
     }
     public void getAllMembers() {
-        // get all the members
+        memberRepositoryImpl.getAllMembers();
+    }
+    public void getMembersByTeam(int teamId) {
+        memberRepositoryImpl.getMembersByTeam(teamId);
     }
 
 }

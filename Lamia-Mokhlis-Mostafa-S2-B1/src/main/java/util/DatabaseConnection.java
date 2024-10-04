@@ -55,8 +55,7 @@ public class DatabaseConnection {
 		}
 		return instance;
 	}
-	
- 
+
 	public void closeConnection() {
 		if (connection != null) {
 			try {
@@ -68,4 +67,3 @@ public class DatabaseConnection {
 		}
 	}
 }
-
