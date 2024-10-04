@@ -125,11 +125,24 @@ public class TaskServlet extends HttpServlet {
 
     private void listTasks(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int projectID = Integer.parseInt(request.getParameter("projectID"));
+        int page = 1;
+        int size = 3; 
+        
+        if (request.getParameter("page") != null) {   
+           page = Integer.parseInt(request.getParameter("page"));                      
+        }
 
-        List<Task> tasks = taskService.getProjectTasks(projectID);
+        if (request.getParameter("size") != null) { 
+           size = Integer.parseInt(request.getParameter("size")); 
+        }
 
-        // Set tasks as a request attribute to be accessed in JSP
+        List<Task> tasks = taskService.getPaginatedProjectTasks(projectID, page, size);
+        int totalTasks = taskService.getTotalTasksForProject(projectID);
+        int totalPages = (int) Math.ceil((double) totalTasks / size);
+
         request.setAttribute("tasks", tasks);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
 
         // Forward to JSP for rendering
         RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/taskList.jsp");

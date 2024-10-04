@@ -101,7 +101,7 @@ public class ProjectDAOImpl implements  ProjectDAO{
 	                project.setDescription(resultSet.getString("description"));
 	                project.setStartDate(resultSet.getDate("startDate").toLocalDate());
 	                project.setEndDate(resultSet.getDate("endDate") != null ? resultSet.getDate("endDate").toLocalDate() : null);
-	                project.setStatus(ProjectStatus.valueOf(resultSet.getString("status")));
+	                project.setStatus(ProjectStatus.valueOf(resultSet.getString("status").toUpperCase()));
 	                project.setTeamId(resultSet.getInt("team_id"));
 	            } else {
 	                System.out.println("No project found with ID " + id + ".");

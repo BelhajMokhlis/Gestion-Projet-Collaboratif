@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -34,5 +34,26 @@
             </tbody>
         </table>
     </div>
+    <nav aria-label="Page navigation">
+    <ul class="pagination">
+        <c:if test="${currentPage > 1}">
+            <li class="page-item">
+                <a class="page-link" href="?action=list&projectID=${param.projectID}&page=${currentPage - 1}&size=3">Previous</a>
+            </li>
+        </c:if>
+        
+        <c:forEach begin="1" end="${totalPages}" var="i">
+            <li class="page-item <c:if test='${i == currentPage}'>active</c:if>">
+                <a class="page-link" href="?action=list&projectID=${param.projectID}&page=${i}&size=3">${i}</a>
+            </li>
+        </c:forEach>
+
+        <c:if test="${currentPage < totalPages}">
+            <li class="page-item">
+                <a class="page-link" href="?action=list&projectID=${param.projectID}&page=${currentPage + 1}&size=3">Next</a>
+            </li>
+        </c:if>
+    </ul>
+</nav>
 </body>
 </html>

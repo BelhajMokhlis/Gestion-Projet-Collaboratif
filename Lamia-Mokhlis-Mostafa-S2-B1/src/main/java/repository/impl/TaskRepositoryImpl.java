@@ -46,5 +46,14 @@ public class TaskRepositoryImpl implements TaskRepository {
                 .filter(task -> task.getProject().getId() == projectID)
                 .collect(Collectors.toList()));
     }
+
+    @Override
+    public Optional<List<Task>> getPaginatedProjectTasks(int projectID, int page, int size) {
+        return Optional.of(taskDao.getAll().stream()
+                .filter(task -> task.getProject().getId() == projectID) // Filter by project ID
+                .skip((page - 1) * size) // Skip the tasks for previous pages
+                .limit(size) // Limit the number of tasks to the page size
+                .collect(Collectors.toList()));
+    }
 }
 

@@ -12,5 +12,6 @@ public interface TaskRepository {
     void update(Task task);
     void delete(int taskID);
     Optional<List<Task>> getAllProjectTasks(int projectID);
+    Optional<List<Task>> getPaginatedProjectTasks(int projectID, int page, int size);
 }
 
