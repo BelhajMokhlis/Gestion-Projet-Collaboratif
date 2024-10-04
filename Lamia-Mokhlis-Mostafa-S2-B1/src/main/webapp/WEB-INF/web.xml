@@ -10,12 +10,12 @@
     <welcome-file>default.htm</welcome-file>
   </welcome-file-list>
   <servlet>
-    <servlet-name>GestionProjetServlet</servlet-name>
-    <servlet-class>com.project.controller.GestionProjetServlet</servlet-class>
+    <servlet-name>ProjectServlet</servlet-name>
+    <servlet-class>controller.ProjectServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>GestionProjetServlet</servlet-name>
-    <url-pattern>/projets</url-pattern>
+    <servlet-name>ProjectServlet</servlet-name>
+    <url-pattern>/ProjectServlet</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>TaskServlet</servlet-name>

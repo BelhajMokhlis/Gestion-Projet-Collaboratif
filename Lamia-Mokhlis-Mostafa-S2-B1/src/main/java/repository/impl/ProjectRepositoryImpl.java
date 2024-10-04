@@ -1,8 +1,9 @@
 package repository.impl;
 
 import java.util.List;
-import dao.ProjectDAO;
-import dao.ProjectDAOImpl;
+
+import dao.Interface.ProjectDAO;
+import dao.impl.ProjectDAOImpl;
 import model.Project;
 import repository.Interface.ProjectRepository;
 

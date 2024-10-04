@@ -1,4 +1,4 @@
-package dao;
+package dao.impl;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.mysql.cj.xdevapi.Statement;
 
+import dao.Interface.ProjectDAO;
 import model.Project;
 import model.enums.ProjectStatus;
 import util.DatabaseConnection;
@@ -101,7 +102,7 @@ public class ProjectDAOImpl implements  ProjectDAO{
 	                project.setDescription(resultSet.getString("description"));
 	                project.setStartDate(resultSet.getDate("startDate").toLocalDate());
 	                project.setEndDate(resultSet.getDate("endDate") != null ? resultSet.getDate("endDate").toLocalDate() : null);
-	                project.setStatus(ProjectStatus.valueOf(resultSet.getString("status")));
+	                project.setStatus(ProjectStatus.valueOf(resultSet.getString("status").toUpperCase()));
 	                project.setTeamId(resultSet.getInt("team_id"));
 	            } else {
 	                System.out.println("No project found with ID " + id + ".");
@@ -127,7 +128,7 @@ public class ProjectDAOImpl implements  ProjectDAO{
 	                project.setDescription(resultSet.getString("description"));
 	                project.setStartDate(resultSet.getDate("startDate").toLocalDate());
 	                project.setEndDate(resultSet.getDate("endDate") != null ? resultSet.getDate("endDate").toLocalDate() : null);
-	                project.setStatus(ProjectStatus.valueOf(resultSet.getString("status")));
+	                project.setStatus(ProjectStatus.valueOf(resultSet.getString("status").toUpperCase()));
 	                project.setTeamId(resultSet.getInt("team_id"));
 	                projects.add(project);
 	            }
