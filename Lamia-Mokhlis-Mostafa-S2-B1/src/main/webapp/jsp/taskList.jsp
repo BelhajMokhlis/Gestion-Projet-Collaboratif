@@ -6,6 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Project Tasks</title>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <body>
@@ -35,7 +36,7 @@
         </table>
     </div>
     <nav aria-label="Page navigation">
-    <ul class="pagination">
+    <ul class="pagination mx-auto">
         <c:if test="${currentPage > 1}">
             <li class="page-item">
                 <a class="page-link" href="?action=list&projectID=${param.projectID}&page=${currentPage - 1}&size=3">Previous</a>
@@ -55,5 +56,10 @@
         </c:if>
     </ul>
 </nav>
+
+<!-- Bootstrap JS dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
