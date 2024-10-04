@@ -11,14 +11,14 @@ public class TeamService {
     public TeamService() {
         this.teamRepositoryImpl = new TeamRepositoryImpl();
     }
-    public void addTeam(Team team) {
-        teamRepositoryImpl.addTeam(team);
+    public boolean addTeam(Team team) {
+        return teamRepositoryImpl.addTeam(team);
     }
-    public void removeTeam(Team team) {
-        teamRepositoryImpl.removeTeam(team);
+    public boolean removeTeam(Team team) {
+        return teamRepositoryImpl.removeTeam(team);
     }
-    public void updateTeam(Team team) {
-        teamRepositoryImpl.updateTeam(team);
+    public boolean updateTeam(Team team) {
+        return teamRepositoryImpl.updateTeam(team);
     }
     public Team getTeam(int id) {
         return teamRepositoryImpl.getTeam(id);

@@ -1,5 +1,5 @@
 package controller;
 
-public class TeamController {
+public class TeamServlet {
 
 }
