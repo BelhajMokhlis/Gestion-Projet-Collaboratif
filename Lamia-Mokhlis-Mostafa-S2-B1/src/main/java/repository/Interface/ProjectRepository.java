@@ -1,6 +1,7 @@
 package repository.Interface;
 
 import java.util.List;
+import java.util.Map;
 
 import model.Project;
 
@@ -13,4 +14,5 @@ public interface ProjectRepository {
     List<Project> findAll();
    int countAllProjects();
    List<Project> findProjectsWithPagination(int page, int pageSize);
+   Map<Integer, Integer> countTasksPerProject();
 }

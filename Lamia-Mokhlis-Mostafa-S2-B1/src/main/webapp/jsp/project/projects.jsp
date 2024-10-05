@@ -11,7 +11,7 @@
     
     <!-- Link styled as a button to View Projects -->
     <a href="${pageContext.request.contextPath}/ProjectsServlet?action=list" class="btn btn-primary mt-3">View Projects</a>
-
+<a href="${pageContext.request.contextPath}/ProjectsServlet?action=stats" class="btn btn-info mt-3">View Projects Statistics</a>
 </div>
 
 <!-- Bootstrap JS and dependencies -->

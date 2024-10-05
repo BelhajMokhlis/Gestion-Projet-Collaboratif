@@ -55,8 +55,6 @@ public class ProjectService {
     
     private void loadProjectsIntoMap() {
     	    List<Project> projects = projectRepository.findAll();
-
-    	    // Debugging output to confirm projects are being loaded
     	    System.out.println("Loading projects from repository:");
     	    if (projects.isEmpty()) {
     	        System.out.println("No projects found.");
@@ -76,13 +74,17 @@ public class ProjectService {
                 .filter(project -> project.getName().toLowerCase().contains(title.toLowerCase())) 
                 .collect(Collectors.toList());
     }
+    
     public static void main(String[] args) {
-    	   ProjectService projectService = new ProjectService(); // Create an instance of ProjectService
-
-           // Display the contents of the projectMap
+    	   ProjectService projectService = new ProjectService(); 
            System.out.println("Projects in the map:");
            for (Map.Entry<String, Project> entry : projectService.projectMap.entrySet()) {
                System.out.println("Project Name: " + entry.getKey() + ", Project Details: " + entry.getValue());
            }
     }
+    
+    public Map<Integer, Integer> getTaskCountForEachProject() {
+        return projectRepository.countTasksPerProject();
+    }
+
 }

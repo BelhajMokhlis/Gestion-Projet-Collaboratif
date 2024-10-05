@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -52,6 +53,8 @@ public class ProjectsServlet extends HttpServlet {
 	        	   viewProjectDetails(request, response);
 	        }else if  ("search".equals(action)) {
 	        	searchProjects(request, response); 
+	        }else if ("stats".equals(action)) {
+	        	 showProjectStats(request, response); 
 	        }
 	}
 
@@ -68,6 +71,16 @@ public class ProjectsServlet extends HttpServlet {
 	        }
 	}
 	
+	private void showProjectStats(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    ProjectService projectService = new ProjectService();
+	    Map<Integer, Integer> taskCounts = projectService.getTaskCountForEachProject();
+	    List<Project> projects = projectService.findAllProjects();	    
+	    request.setAttribute("projects", projects);
+	    request.setAttribute("taskCounts", taskCounts);	    
+	    RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/project/projectStats.jsp");
+	    dispatcher.forward(request, response);
+	}
+
 	
 	private void searchProjects(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		 	String title = request.getParameter("title");

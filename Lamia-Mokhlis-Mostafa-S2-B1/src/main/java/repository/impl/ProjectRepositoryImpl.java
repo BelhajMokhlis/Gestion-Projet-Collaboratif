@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import dao.Interface.ProjectDAO;
 import dao.impl.ProjectDAOImpl;
@@ -93,4 +95,24 @@ public class ProjectRepositoryImpl implements ProjectRepository  {
 	        }
 	        return count;
 	    }
+	    
+	    public Map<Integer, Integer> countTasksPerProject() {
+	        String sql = "SELECT project_id, COUNT(*) AS task_count FROM Task GROUP BY project_id";
+	        Map<Integer, Integer> taskCounts = new HashMap<>();
+
+	        try (PreparedStatement statement = connection.prepareStatement(sql);
+		             ResultSet rs = statement.executeQuery()) {
+
+	            while (rs.next()) {
+	                int projectId = rs.getInt("project_id");
+	                int taskCount = rs.getInt("task_count");
+	                taskCounts.put(projectId, taskCount);
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+
+	        return taskCounts;
+	    }
+
 }
