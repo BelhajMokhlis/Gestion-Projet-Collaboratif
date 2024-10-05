@@ -7,9 +7,18 @@
     <meta charset="UTF-8">
     <title>Tasks</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    
 </head>
 <body>
 <div class="container mt-5">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/index.jsp"><i class="fas fa-home"></i> Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">New Task</li>
+            </ol>
+        </nav>
+
     <h2 class="mb-4">Add New Task</h2>
     <form action="${pageContext.request.contextPath}/tasks" method="post">
         <input type="hidden" name="action" value="insert">

@@ -6,45 +6,70 @@
     <meta charset="UTF-8">
     <title>Show Member</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    
 </head>
 <body>
-    <div class="container">
-        <h1>Edit Member</h1>
+    <div class="container mt-4">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-light p-2">
+                <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/index.jsp"><i class="fas fa-home"></i> Home</a></li>
+                <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/teams">Teams List</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Member</li>
+                
+            </ol>
+        </nav>
+                <h1 class="mb-4">Edit Member</h1>
+        
         
          <c:if test="${not empty message}">
-            <div class="alert alert-info">${message}</div>
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
         </c:if>
-        <form action="?action=editMember&id=${membre.id}" method="post" onsubmit="return validateForm()">
-            <div class="mb-3">
-                <label for="firstName" class="form-label">First Name:</label>
-                <input type="text" class="form-control" id="firstName" name="firstName" value="${membre.firstName}" required>
-            </div>
-            <div class="mb-3">
-                <label for="lastName" class="form-label">Last Name:</label>
-                <input type="text" class="form-control" id="lastName" name="lastName" value="${membre.lastName}" required>
-            </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Email:</label>
-                <input type="email" class="form-control" id="email" name="email" value="${membre.email}" required>
-            </div>
-            <div class="mb-3">
-                <label for="role" class="form-label">Role:</label>
-                <select class="form-control" id="role" name="role">
-                    <option value="DESIGNER" ${membre.role eq 'DESIGNER' ? 'selected' : ''}>DESIGNER</option>
-                    <option value="DEVELOPER" ${membre.role eq 'DEVELOPER' ? 'selected' : ''}>DEVELOPER</option>
-                    <option value="PROJECT_MANAGER" ${membre.role eq 'PROJECT_MANAGER' ? 'selected' : ''}>PROJECT_MANAGER</option>
-                </select>
-            </div>
+        <div class="card mb-4">
+            <div class="card-body">
+                <form action="?action=editMember&id=${membre.id}" method="post" onsubmit="return validateForm()">
+                    <div class="mb-3">
+                        <label for="firstName" class="form-label">First Name:</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName" value="${membre.firstName}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lastName" class="form-label">Last Name:</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName" value="${membre.lastName}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" class="form-control" id="email" name="email" value="${membre.email}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Role:</label>
+                        <select class="form-control" id="role" name="role">
+                            <option value="DESIGNER" ${membre.role eq 'DESIGNER' ? 'selected' : ''}>DESIGNER</option>
+                            <option value="DEVELOPER" ${membre.role eq 'DEVELOPER' ? 'selected' : ''}>DEVELOPER</option>
+                            <option value="PROJECT_MANAGER" ${membre.role eq 'PROJECT_MANAGER' ? 'selected' : ''}>PROJECT_MANAGER</option>
+                        </select>
+                    </div>
           
-            <button type="submit" class="btn btn-primary" id="updateButton" disabled>Update</button>
-        </form>
+                    <button type="submit" class="btn btn-primary" id="updateButton" disabled>Update</button>
+                </form>
+            </div>
+        </div>
 
         <!-- New Task Table -->
-        <h2 class="mt-5">Member Tasks</h2>
+        <h2 class="mb-3">Member Tasks</h2>
         <c:choose>
             <c:when test="${not empty taskmessage}">
-                <div class="alert alert-info">${taskmessage}</div>
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    ${taskmessage}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
             </c:when>
             <c:otherwise>
                 <table class="table table-striped">

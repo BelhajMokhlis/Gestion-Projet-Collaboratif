@@ -109,19 +109,20 @@ public class MemberDaoImpl implements MemberDao {
 
     @Override
     public List<Membre> getMembersByTeam(int teamId) {
-        List<Membre> membres = new ArrayList<>();
+        List<Membre> members= new ArrayList<Membre>();
         String sql = "SELECT * FROM member WHERE team_id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, teamId);
             try (ResultSet rs = pstmt.executeQuery()) { 
                 while (rs.next()) {
-                    membres.add(extractMembreFromResultSet(rs));
+                    members.add(extractMembreFromResultSet(rs));
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return membres;
+        
+        return members;
     }
 
 
