@@ -2,9 +2,11 @@ package dao.impl;
 
 
 
+import dao.Interface.MemberDao;
 import dao.Interface.ProjectDAO;
 import dao.impl.ProjectDAOImpl;
 import dao.Interface.TaskDAO;
+import model.Membre;
 import model.Project;
 import model.Task;
 import model.enums.TaskPriority;
@@ -57,6 +59,11 @@ public class TaskDaoImpl implements TaskDAO {
                 ProjectDAO projectDao = new ProjectDAOImpl();
                 Project project = projectDao.findById(projectID);
                 task.setProject(project);
+
+                int memberID = rs.getInt("member_id");
+                MemberDao memberDao = new MemberDaoImpl();
+                Membre member = memberDao.getMember(memberID);
+                task.setMember(member);
             }
             System.out.println("Task retrieved successfully!");
         } catch (SQLException e) {
@@ -116,6 +123,11 @@ public class TaskDaoImpl implements TaskDAO {
                 ProjectDAO projectDAO = new ProjectDAOImpl();
                 Project project = projectDAO.findById(projectID);
                 task.setProject(project);
+
+                int memberID = rs.getInt("member_id");
+                MemberDao memberDao = new MemberDaoImpl();
+                Membre member = memberDao.getMember(memberID);
+                task.setMember(member);
 
                 tasks.add(task);
             }

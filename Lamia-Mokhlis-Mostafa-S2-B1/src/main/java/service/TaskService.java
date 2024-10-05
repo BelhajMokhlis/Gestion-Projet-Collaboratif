@@ -43,12 +43,10 @@ public class TaskService {
     }
     public List<Task> getTaskByMemberId(int memberId){
     	List<Task> tasks = taskRepository.getAll();
-    	
-        return tasks;
+    	return tasks.stream().filter(task->task.getMember().getId() == memberId).collect(Collectors.toList());
     }
 
     public List<Task> getPaginatedProjectTasks(int projectID, int page, int size) {
-//        int offset = (page - 1) * size;  // Calculate offset based on page and size
         return taskRepository.getPaginatedProjectTasks(projectID, page, size).orElse(Collections.emptyList());
     }
 
