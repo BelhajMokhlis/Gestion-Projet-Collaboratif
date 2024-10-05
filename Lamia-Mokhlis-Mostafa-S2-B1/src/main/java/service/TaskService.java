@@ -41,6 +41,11 @@ public class TaskService {
     public List<Task> getProjectTasks(int projectID){
         return taskRepository.getAllProjectTasks(projectID).orElse(Collections.emptyList());
     }
+    public List<Task> getTaskByMemberId(int memberId){
+    	List<Task> tasks = taskRepository.getAll();
+    	
+        return tasks;
+    }
 
     public List<Task> getPaginatedProjectTasks(int projectID, int page, int size) {
 //        int offset = (page - 1) * size;  // Calculate offset based on page and size
