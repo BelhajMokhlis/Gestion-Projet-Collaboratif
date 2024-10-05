@@ -6,9 +6,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.Team;
+import model.Task;
 import model.enums.MemberRole;
 import model.Membre;
 import service.MemberService;
+import service.TaskService;
 import service.TeamService;
 
 import java.io.IOException;
@@ -20,6 +22,7 @@ import java.util.List;
 public class TeamServlet extends HttpServlet {
     private TeamService teamService;
     private MemberService memberService;
+    private TaskService taskService;
 
     /**
      * Constructor for TeamServlet.
@@ -28,6 +31,7 @@ public class TeamServlet extends HttpServlet {
     public TeamServlet() {
         this.teamService = new TeamService();
         this.memberService = new MemberService();
+        this.taskService = new TaskService();
     }
 
     /**
@@ -280,8 +284,17 @@ public class TeamServlet extends HttpServlet {
     public void showMember(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         Membre membre = memberService.getMember(id);
+        
         if (membre != null) {
             request.setAttribute("membre", membre);
+            
+            List<Task> tasks = taskService.getTaskByMemberId(id);
+            if (tasks != null && !tasks.isEmpty()) {
+                request.setAttribute("tasks", tasks);
+            } else {
+                request.setAttribute("taskmessage", "No tasks found for this member");
+            }
+            
             request.getRequestDispatcher("/jsp/member/showMember.jsp").forward(request, response);
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Member not found");

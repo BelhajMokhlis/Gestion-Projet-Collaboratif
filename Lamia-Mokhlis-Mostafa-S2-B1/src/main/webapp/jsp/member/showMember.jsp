@@ -39,6 +39,42 @@
           
             <button type="submit" class="btn btn-primary" id="updateButton" disabled>Update</button>
         </form>
+
+        <!-- New Task Table -->
+        <h2 class="mt-5">Member Tasks</h2>
+        <c:choose>
+            <c:when test="${not empty taskmessage}">
+                <div class="alert alert-info">${taskmessage}</div>
+            </c:when>
+            <c:otherwise>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Task ID</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Creation Date</th>
+                            <th>Due Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="task" items="${tasks}">
+                            <tr>
+                                <td>${task.taskID}</td>
+                                <td>${task.title}</td>
+                                <td>${task.description}</td>
+                                <td>${task.priority}</td>
+                                <td>${task.status}</td>
+                                <td>${task.creationDate}</td>
+                                <td>${task.dueDate}</td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </c:otherwise>
+        </c:choose>
     </div>
 
     <script>

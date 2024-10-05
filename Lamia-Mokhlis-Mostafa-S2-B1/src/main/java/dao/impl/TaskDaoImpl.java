@@ -1,7 +1,7 @@
 package dao.impl;
 
 import dao.Interface.TaskDAO;
-import dao.ProjectDAOImpl;
+import dao.impl.ProjectDAOImpl;
 import model.Project;
 import model.Task;
 import model.enums.TaskPriority;
