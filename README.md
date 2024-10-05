@@ -122,7 +122,19 @@ FLUSH PRIVILEGES;
 ```
 
 ## Captures d'écran
-[Insérez ici des captures d'écran de l'application en action]
+
+
+### Page d'accueil
+![Page d'accueil](https://raw.githubusercontent.com/BelhajMokhlis/Gestion-Projet-Collaboratif/refs/heads/main/captures/Home.png)
+
+### Liste des projets
+![Liste des projets](https://raw.githubusercontent.com/BelhajMokhlis/Gestion-Projet-Collaboratif/refs/heads/main/captures/ProjectList.png)
+
+### Tâches du projet
+![Tâches du projet](https://raw.githubusercontent.com/BelhajMokhlis/Gestion-Projet-Collaboratif/refs/heads/main/captures/ProjectTasks.png)
+
+### Liste des équipes
+![Liste des équipes](https://raw.githubusercontent.com/BelhajMokhlis/Gestion-Projet-Collaboratif/refs/heads/main/captures/TeamsList.png)
 
 ## Améliorations futures possibles
 - Ajout d'un tableau de bord personnalisable
