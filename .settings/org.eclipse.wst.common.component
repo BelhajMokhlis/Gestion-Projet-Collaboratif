@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="Gestion-Projet-Collaboratif">
-        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/Lamia-Mokhlis-Mostafa-S2-B1/src/main/java"/>
-        <property name="context-root" value="Gestion-Projet-Collaboratif"/>
-        <property name="java-output-path" value="/Gestion-Projet-Collaboratif/bin"/>
-    </wb-module>
-</project-modules>
