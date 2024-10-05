@@ -39,10 +39,20 @@ public class TaskServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        if ("get".equals(action)) {
-            getTaskByID(request, response);
-        } else {
-            listTasks(request, response);
+       
+        switch (action) {
+        case "get":
+        	getTaskByID(request, response);
+            break;
+        case "edit":
+            editTask(request, response);
+            break;
+        case "list":
+        	listTasks(request, response);
+            break;
+        default:
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
+            break;
         }
     }
 
@@ -107,10 +117,47 @@ public class TaskServlet extends HttpServlet {
         }
     }
 
+    private void editTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int taskID = Integer.parseInt(request.getParameter("taskId"));
 
-    private void updateTask(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+        Task task = taskService.getTask(taskID);
 
+        request.setAttribute("task", task);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/editTask.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void updateTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        int taskID = Integer.parseInt(request.getParameter("taskId"));
+        String title = request.getParameter("title");
+        String description = request.getParameter("description");
+        String priorityStr = request.getParameter("priority");
+        String dueDateStr = request.getParameter("dueDate");
+
+        TaskPriority priority = TaskPriority.valueOf(priorityStr.toUpperCase());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+
+        LocalDate dueDate;
+        try {
+            dueDate = LocalDate.parse(dueDateStr, formatter);
+        } catch (DateTimeParseException e) {
+            request.setAttribute("errorMessage", "Invalid due date format. Please use MM/DD/YYYY.");
+            request.getRequestDispatcher("/jsp/errorPage.jsp").forward(request, response);
+            return;
+        }
+
+        Task task = taskService.getTask(taskID);
+        task.setTitle(title);
+        task.setDescription(description);
+        task.setPriority(priority);
+        task.setDueDate(dueDate);
+
+        taskService.updateTask(task);
+
+        // Redirect to the task list page after update
+        response.sendRedirect(request.getContextPath() + "/tasks?action=list");
     }
 
     private void deleteTask(HttpServletRequest request, HttpServletResponse response)
@@ -126,7 +173,7 @@ public class TaskServlet extends HttpServlet {
     private void listTasks(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int projectID = Integer.parseInt(request.getParameter("projectID"));
         int page = 1;
-        int size = 3; 
+        int size = 5; 
         
         if (request.getParameter("page") != null) {   
            page = Integer.parseInt(request.getParameter("page"));                      

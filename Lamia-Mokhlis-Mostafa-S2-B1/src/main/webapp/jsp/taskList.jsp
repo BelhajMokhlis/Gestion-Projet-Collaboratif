@@ -15,21 +15,27 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Task ID</th>
                     <th>Task title</th>
                     <th>Description</th>
                     <th>Status</th>
                     <th>Due Date</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 <c:forEach var="task" items="${tasks}">
                     <tr>
-                        <td>${task.taskID}</td>
                         <td>${task.title}</td>
                         <td>${task.description}</td>
                         <td>${task.status}</td>
                         <td>${task.dueDate}</td>
+                        <td>
+                        	<form action="${pageContext.request.contextPath}/tasks" method="get">
+    							<input type="hidden" name="action" value="edit">
+    							<input type="hidden" name="taskID" value="${task.taskID}">
+    							<button type="submit" class="btn btn-primary">edit</button>
+							</form>
+						</td>
                     </tr>
                 </c:forEach>
             </tbody>
@@ -39,19 +45,19 @@
     <ul class="pagination mx-auto">
         <c:if test="${currentPage > 1}">
             <li class="page-item">
-                <a class="page-link" href="?action=list&projectID=${param.projectID}&page=${currentPage - 1}&size=3">Previous</a>
+                <a class="page-link" href="?action=list&projectID=${param.projectID}&page=${currentPage - 1}&size=5">Previous</a>
             </li>
         </c:if>
         
         <c:forEach begin="1" end="${totalPages}" var="i">
             <li class="page-item <c:if test='${i == currentPage}'>active</c:if>">
-                <a class="page-link" href="?action=list&projectID=${param.projectID}&page=${i}&size=3">${i}</a>
+                <a class="page-link" href="?action=list&projectID=${param.projectID}&page=${i}&size=5">${i}</a>
             </li>
         </c:forEach>
 
         <c:if test="${currentPage < totalPages}">
             <li class="page-item">
-                <a class="page-link" href="?action=list&projectID=${param.projectID}&page=${currentPage + 1}&size=3">Next</a>
+                <a class="page-link" href="?action=list&projectID=${param.projectID}&page=${currentPage + 1}&size=5">Next</a>
             </li>
         </c:if>
     </ul>

@@ -1,7 +1,11 @@
 package dao.impl;
 
+
+
+import dao.Interface.ProjectDAO;
+import dao.impl.ProjectDAOImpl;
 import dao.Interface.TaskDAO;
-import dao.ProjectDAOImpl;
+
 import model.Project;
 import model.Task;
 import model.enums.TaskPriority;
@@ -49,6 +53,11 @@ public class TaskDaoImpl implements TaskDAO {
                 task.setStatus(TaskStatus.valueOf(rs.getString("status")));
                 task.setCreationDate(rs.getDate("creationDate").toLocalDate());
                 task.setDueDate(rs.getDate("dueDate").toLocalDate());
+                
+                int projectID = rs.getInt("project_id");
+                ProjectDAO projectDao = new ProjectDAOImpl();
+                Project project = projectDao.findById(projectID);
+                task.setProject(project);
             }
             System.out.println("Task retrieved successfully!");
         } catch (SQLException e) {
@@ -105,8 +114,8 @@ public class TaskDaoImpl implements TaskDAO {
                 task.setDueDate(rs.getDate("dueDate").toLocalDate());
 
                 int projectID = rs.getInt("project_id");
-                ProjectDAOImpl projectDao = new ProjectDAOImpl();
-                Project project = projectDao.findById(projectID);
+                ProjectDAO projectDAO = new ProjectDAOImpl();
+                Project project = projectDAO.findById(projectID);
                 task.setProject(project);
 
                 tasks.add(task);
