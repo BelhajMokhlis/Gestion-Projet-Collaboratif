@@ -50,10 +50,12 @@ public class ProjectsServlet extends HttpServlet {
 	            }
 	        }else if ("view".equals(action)) {
 	        	   viewProjectDetails(request, response);
+	        }else if  ("search".equals(action)) {
+	        	searchProjects(request, response); 
 	        }
 	}
 
-
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		  String action = request.getParameter("action");
 
@@ -66,6 +68,15 @@ public class ProjectsServlet extends HttpServlet {
 	        }
 	}
 	
+	
+	private void searchProjects(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		 	String title = request.getParameter("title");
+		    List<Project> searchResults = projectService.searchProjectsByTitle(title);
+		    request.setAttribute("projects", searchResults);
+		    RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/project/projectList.jsp");
+		    dispatcher.forward(request, response); 			
+	}
+	         
 	private void viewProjectDetails(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException  {
 		int projectId = Integer.parseInt(request.getParameter("id"));
 	    Project project = projectService.findProjectById(projectId);
@@ -92,7 +103,7 @@ public class ProjectsServlet extends HttpServlet {
 		            }
 		        }
 
-		        List<Project> projects = projectService.getProjects(page, pageSize);
+		        List<Project> projects = projectService.getProjectsPag(page, pageSize);
 		        int totalProjects = projectService.getTotalProjectsCount(); 
 		        int totalPages = (int) Math.ceil((double) totalProjects / pageSize);
 

@@ -13,13 +13,15 @@
 
     <h1 class="mt-5">Project List</h1>
  <!-- Search Form -->
-   <form action="ProjectsServlet?action=search" method="get" class="form-inline mb-3">
+<form action="ProjectsServlet" method="get" class="form-inline mb-3">
+    <input type="hidden" name="action" value="search">
     <div class="form-group mx-sm-3 mb-2">
-        <label for="searchTitle" class="sr-only">Project Title</label>
+        <label for="searchTitle" class="sr-only">Project Name</label>
         <input type="text" class="form-control" id="searchTitle" name="title" placeholder="Search by title">
     </div>
     <button type="submit" class="btn btn-primary mb-2">Search</button>
 </form>
+
     <!-- Debugging Output -->
     <c:if test="${empty projects}">
         <p>No projects available</p>
@@ -30,9 +32,7 @@
         ${sessionScope.msg}
     </div>
 </c:if>
-    <c:if test="${not empty projects}">
-        <p>Number of projects: ${fn:length(projects)}</p> <!-- Display the number of projects -->
-    </c:if>
+
 
     <!-- Project Table -->
     <table class="table table-striped mt-3">
