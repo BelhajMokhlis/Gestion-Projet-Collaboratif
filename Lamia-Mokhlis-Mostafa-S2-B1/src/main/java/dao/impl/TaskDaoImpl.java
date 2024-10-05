@@ -75,7 +75,7 @@ public class TaskDaoImpl implements TaskDAO {
 
     @Override
     public void update(Task task) {
-        String query = "UPDATE task SET title = ?, description = ?, priority = ?, status = ?, creationDate = ?, dueDate = ? WHERE id = ?";
+        String query = "UPDATE task SET title = ?, description = ?, priority = ?, status = ?, creationDate = ?, dueDate = ?, member_id = ? WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, task.getTitle());
             ps.setString(2, task.getDescription());
@@ -83,7 +83,8 @@ public class TaskDaoImpl implements TaskDAO {
             ps.setString(4, task.getStatus().name());
             ps.setDate(5, Date.valueOf(task.getCreationDate()));
             ps.setDate(6, Date.valueOf(task.getDueDate()));
-            ps.setInt(7, task.getTaskID());
+            ps.setInt(7, task.getMember().getId());
+            ps.setInt(8, task.getTaskID());
 
             ps.executeUpdate();
             System.out.println("Task updated successfully!");
