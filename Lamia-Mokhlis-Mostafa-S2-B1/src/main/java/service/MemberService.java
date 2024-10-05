@@ -1,5 +1,7 @@
 package service;
 
+import java.util.List;
+
 import model.Membre;
 import repository.impl.MemberRepositoryImpl;
 
@@ -10,23 +12,23 @@ public class MemberService {
         this.memberRepositoryImpl = new MemberRepositoryImpl();
     }    
 
-    public void addMember(Membre membre) {
-        memberRepositoryImpl.addMember(membre);
+    public boolean addMember(Membre membre) {
+        return memberRepositoryImpl.addMember(membre);
     }
-    public void removeMember(Membre membre) {
-        memberRepositoryImpl.removeMember(membre);
+    public boolean removeMember(Membre membre) {
+        return memberRepositoryImpl.removeMember(membre);
     }
-    public void updateMember(Membre membre) {
-        memberRepositoryImpl.updateMember(membre);
+    public boolean updateMember(Membre membre) {
+        return  memberRepositoryImpl.updateMember(membre);
     }
-    public void getMember(int id) {
-        memberRepositoryImpl.getMember(id);
+    public Membre getMember(int id) {
+        return memberRepositoryImpl.getMember(id);
     }
-    public void getAllMembers() {
-        memberRepositoryImpl.getAllMembers();
+    public List<Membre> getAllMembers() {
+        return memberRepositoryImpl.getAllMembers();
     }
-    public void getMembersByTeam(int teamId) {
-        memberRepositoryImpl.getMembersByTeam(teamId);
+    public List<Membre> getMembersByTeam(int teamId) {
+        return memberRepositoryImpl.getMembersByTeam(teamId);
     }
 
 }

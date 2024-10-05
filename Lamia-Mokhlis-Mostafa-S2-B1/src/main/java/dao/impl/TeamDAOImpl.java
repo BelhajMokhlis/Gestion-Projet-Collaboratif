@@ -1,4 +1,4 @@
-package dao;
+package dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,62 +6,78 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.util.List;
+
+import dao.Interface.MemberDao; 
+import dao.Interface.TeamDAO;
+
 import java.util.ArrayList;
 
 import model.Team;
 import util.DatabaseConnection;
 
+
 public class TeamDAOImpl implements TeamDAO {
 
-    private Connection connection;
-    private MemberDao memberDao;
+    private  Connection connection;
 
     public TeamDAOImpl() {
         this.connection = DatabaseConnection.getInstance().getConnection();
-        this.memberDao = new MemberDaoImpl();
+      
     }
 
     @Override
     public boolean addTeam(Team team) {
-        String sql = "INSERT INTO teams (id, name) VALUES (?, ?)";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, team.getId());
-            pstmt.setString(2, team.getName());
+        String sql = "INSERT INTO team (name) VALUES (?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pstmt.setString(1, team.getName());
             int affectedRows = pstmt.executeUpdate();
-            return affectedRows > 0;
+
+            if (affectedRows == 0) {
+                return false;
+            }
+
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    team.setId(generatedKeys.getInt(1));
+                }
+            }
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
+
     @Override
     public boolean removeTeam(Team team) {
-        String sql = "DELETE FROM teams WHERE id = ?";
+        String sql = "DELETE FROM team WHERE id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, team.getId());
-            int affectedRows = pstmt.executeUpdate();
-            return affectedRows > 0;
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
+
     @Override
     public boolean updateTeam(Team team) {
-        String sql = "UPDATE teams SET name = ? WHERE id = ?";
+        String sql = "UPDATE team SET name = ? WHERE id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, team.getName());
             pstmt.setInt(2, team.getId());
-            int affectedRows = pstmt.executeUpdate();
-            return affectedRows > 0;
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
+
     @Override
     public Team getTeam(int id) {
-        String sql = "SELECT * FROM teams WHERE id = ?";
+        String sql = "SELECT * FROM team WHERE id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -69,27 +85,31 @@ public class TeamDAOImpl implements TeamDAO {
                     Team team = new Team();
                     team.setId(rs.getInt("id"));
                     team.setName(rs.getString("name"));
-                    team.setMembers(memberDao.getMembersByTeam(id));
                     return team;
+                } else {
+                    return null;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
+        
+      
+    
+
     @Override
     public List<Team> getAllTeams() {
-        String sql = "SELECT * FROM teams";
+        String sql = "SELECT * FROM team";
         List<Team> teams = new ArrayList<>();
         try (PreparedStatement pstmt = connection.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
             while (rs.next()) {
-               Team team = new Team();
-               team.setId(rs.getInt("id"));
-               team.setName(rs.getString("name"));
-               team.setMembers(memberDao.getMembersByTeam(rs.getInt("id")));
-               teams.add(team); 
+                Team team = new Team();
+                team.setId(rs.getInt("id"));
+                team.setName(rs.getString("name"));
+                teams.add(team);
             }
         } catch (SQLException e) {
             e.printStackTrace();

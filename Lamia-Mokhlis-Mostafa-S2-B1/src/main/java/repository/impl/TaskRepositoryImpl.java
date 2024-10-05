@@ -5,9 +5,15 @@ import model.Task;
 import repository.Interface.TaskRepository;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class TaskRepositoryImpl implements TaskRepository {
-    private final TaskDaoImpl taskDao = new TaskDaoImpl();
+    private final TaskDaoImpl taskDao;
+
+    public TaskRepositoryImpl() {
+        this.taskDao = new TaskDaoImpl();
+    }
 
     @Override
     public void create(Task task) {
@@ -32,6 +38,22 @@ public class TaskRepositoryImpl implements TaskRepository {
     @Override
     public void delete(int taskID) {
         taskDao.delete(taskID);
+    }
+
+    @Override
+    public Optional<List<Task>> getAllProjectTasks(int projectID){
+        return Optional.of(taskDao.getAll().stream()
+                .filter(task -> task.getProject().getId() == projectID)
+                .collect(Collectors.toList()));
+    }
+
+    @Override
+    public Optional<List<Task>> getPaginatedProjectTasks(int projectID, int page, int size) {
+        return Optional.of(taskDao.getAll().stream()
+                .filter(task -> task.getProject().getId() == projectID) // Filter by project ID
+                .skip((page - 1) * size) // Skip the tasks for previous pages
+                .limit(size) // Limit the number of tasks to the page size
+                .collect(Collectors.toList()));
     }
 }
 

@@ -1,12 +1,11 @@
 package repository.impl;
 
-import dao.TeamDAOImpl;
 import model.Team;
 
 import java.util.List;
 
-import dao.TeamDAO;
-
+import dao.Interface.TeamDAO;
+import dao.impl.TeamDAOImpl;
 import repository.Interface.TeamRepository;
 public class TeamRepositoryImpl implements TeamRepository {
     private TeamDAO teamDAOImpl;

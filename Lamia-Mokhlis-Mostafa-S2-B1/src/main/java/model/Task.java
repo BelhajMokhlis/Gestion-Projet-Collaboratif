@@ -13,11 +13,13 @@ public class Task {
     private TaskStatus status;
     private LocalDate creationDate;
     private LocalDate dueDate;
+    private Project project;
+    private Membre member;
 
     public Task() {
     }
 
-    public Task(int taskID, String title, String description, TaskPriority priority, TaskStatus status, LocalDate creationDate, LocalDate dueDate) {
+    public Task(int taskID, String title, String description, TaskPriority priority, TaskStatus status, LocalDate creationDate, LocalDate dueDate, Project project, Membre member) {
         this.taskID = taskID;
         this.title = title;
         this.description = description;
@@ -25,6 +27,8 @@ public class Task {
         this.status = status;
         this.creationDate = creationDate;
         this.dueDate = dueDate;
+        this.project = project;
+        this.member = member;
     }
 
     public int getTaskID() {
@@ -81,6 +85,22 @@ public class Task {
 
     public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public Membre getMember() {
+        return member;
+    }
+
+    public void setMember(Membre membre) {
+        this.member = membre;
     }
 
     @Override

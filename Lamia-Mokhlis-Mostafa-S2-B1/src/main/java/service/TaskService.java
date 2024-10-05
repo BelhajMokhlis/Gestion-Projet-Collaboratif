@@ -5,7 +5,10 @@ import repository.Interface.TaskRepository;
 import repository.impl.TaskRepositoryImpl;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class TaskService {
     private final TaskRepository taskRepository;
@@ -33,6 +36,21 @@ public class TaskService {
 
     public void deleteTask(int taskID) {
         taskRepository.delete(taskID);
+    }
+
+    public List<Task> getProjectTasks(int projectID){
+        return taskRepository.getAllProjectTasks(projectID).orElse(Collections.emptyList());
+    }
+
+    public List<Task> getPaginatedProjectTasks(int projectID, int page, int size) {
+//        int offset = (page - 1) * size;  // Calculate offset based on page and size
+        return taskRepository.getPaginatedProjectTasks(projectID, page, size).orElse(Collections.emptyList());
+    }
+
+    public int getTotalTasksForProject(int projectID) {
+        return (int) taskRepository.getAll().stream()
+                .filter(task -> task.getProject().getId() == projectID)
+                .count();
     }
 
     private void validateTaskInput(Task task) {

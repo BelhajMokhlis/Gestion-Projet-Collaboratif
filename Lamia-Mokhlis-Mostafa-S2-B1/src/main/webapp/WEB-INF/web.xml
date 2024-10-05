@@ -9,6 +9,8 @@
     <welcome-file>default.jsp</welcome-file>
     <welcome-file>default.htm</welcome-file>
   </welcome-file-list>
+
+  <!-- lamia side -->
   <servlet>
     <servlet-name>ProjectsServlet</servlet-name>
     <servlet-class>controller.ProjectsServlet</servlet-class>
@@ -17,6 +19,8 @@
     <servlet-name>ProjectsServlet</servlet-name>
     <url-pattern>/ProjectsServlet</url-pattern>
   </servlet-mapping>
+
+  <!-- mostafa side -->
   <servlet>
     <servlet-name>TaskServlet</servlet-name>
     <servlet-class>controller.TaskServlet</servlet-class>
@@ -25,22 +29,18 @@
     <servlet-name>TaskServlet</servlet-name>
     <url-pattern>/tasks</url-pattern>
   </servlet-mapping>
+  
+  <!-- Mokhlis side -->
   <servlet>
-    <servlet-name>GestionEquipeServlet</servlet-name>
-    <servlet-class>com.project.controller.GestionEquipeServlet</servlet-class>
+    <servlet-name>TeamServlet</servlet-name>
+    <servlet-class>controller.TeamServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>GestionEquipeServlet</servlet-name>
-    <url-pattern>/equipes</url-pattern>
+    <servlet-name>TeamServlet</servlet-name>
+    <url-pattern>/teams</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <servlet-name>GestionMembreServlet</servlet-name>
-    <servlet-class>com.project.controller.MemberController</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>GestionMembreServlet</servlet-name>
-    <url-pattern>/membres</url-pattern>
-  </servlet-mapping>
+
+  
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>/WEB-INF/applicationContext.xml</param-value>

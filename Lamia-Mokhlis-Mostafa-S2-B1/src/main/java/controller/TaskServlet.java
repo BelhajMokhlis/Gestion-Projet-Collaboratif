@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -120,10 +122,31 @@ public class TaskServlet extends HttpServlet {
             throws ServletException, IOException {
 
     }
-    
-    private void listTasks(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
 
+    private void listTasks(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int projectID = Integer.parseInt(request.getParameter("projectID"));
+        int page = 1;
+        int size = 3; 
+        
+        if (request.getParameter("page") != null) {   
+           page = Integer.parseInt(request.getParameter("page"));                      
+        }
+
+        if (request.getParameter("size") != null) { 
+           size = Integer.parseInt(request.getParameter("size")); 
+        }
+
+        List<Task> tasks = taskService.getPaginatedProjectTasks(projectID, page, size);
+        int totalTasks = taskService.getTotalTasksForProject(projectID);
+        int totalPages = (int) Math.ceil((double) totalTasks / size);
+
+        request.setAttribute("tasks", tasks);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+
+        // Forward to JSP for rendering
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/taskList.jsp");
+        dispatcher.forward(request, response);
     }
 
 }

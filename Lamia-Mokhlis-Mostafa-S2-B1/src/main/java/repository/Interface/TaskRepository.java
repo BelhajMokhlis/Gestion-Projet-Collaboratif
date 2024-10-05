@@ -3,6 +3,7 @@ package repository.Interface;
 import model.Task;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TaskRepository {
     void create(Task task);
@@ -10,5 +11,7 @@ public interface TaskRepository {
     List<Task> getAll();
     void update(Task task);
     void delete(int taskID);
+    Optional<List<Task>> getAllProjectTasks(int projectID);
+    Optional<List<Task>> getPaginatedProjectTasks(int projectID, int page, int size);
 }
 
