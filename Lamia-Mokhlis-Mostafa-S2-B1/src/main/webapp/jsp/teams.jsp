@@ -29,10 +29,15 @@
                 <c:forEach var="team" items="${teams}">
                     <tr>
                         <td>${team.id}</td>
-                        <td>${team.name}</td>
                         <td>
+                            <form action="?action=update" method="post" id="form-${team.id}" style="display:inline;">
+                                <input type="hidden" name="id" value="${team.id}">
+                                <input type="text" name="Tname" value="${team.name}" class="form-control form-control-sm team-name-input" data-original-value="${team.name}">
+                            </form>
+                        </td>
+                        <td>
+                            <button type="submit" form="form-${team.id}" class="btn btn-sm btn-success save-edit-btn" disabled>Save Edit</button>
                             <a href="?action=team&id=${team.id}" class="btn btn-sm btn-info">View</a>
-                            <a href="?action=update&id=${team.id}" class="btn btn-sm btn-warning">Edit</a>
                             <form action="?action=delete" method="post" style="display:inline;">
                                 <input type="hidden" name="id" value="${team.id}">
                                 <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this team?')">Delete</button>
@@ -87,6 +92,21 @@
             }
             return false;
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const teamNameInputs = document.querySelectorAll('.team-name-input');
+            
+            teamNameInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    const saveButton = this.closest('tr').querySelector('.save-edit-btn');
+                    if (this.value !== this.dataset.originalValue) {
+                        saveButton.disabled = false;
+                    } else {
+                        saveButton.disabled = true;
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>
