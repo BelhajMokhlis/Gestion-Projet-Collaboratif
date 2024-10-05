@@ -1,8 +1,10 @@
 package controller;
 
+import model.Project;
 import model.Task;
 import model.enums.TaskPriority;
 import model.enums.TaskStatus;
+import service.ProjectService;
 import service.TaskService;
 
 import java.io.IOException;
@@ -44,6 +46,9 @@ public class TaskServlet extends HttpServlet {
         case "get":
         	getTaskByID(request, response);
             break;
+        case "create":
+            createTaskForm(request, response);
+            break;
         case "edit":
             editTask(request, response);
             break;
@@ -78,10 +83,22 @@ public class TaskServlet extends HttpServlet {
                 break;
         }
     }
+    
+    private void createTaskForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        int projectID = Integer.parseInt(request.getParameter("projectID"));
+        
+        request.setAttribute("projectID", projectID);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/addTask.jsp");
+        dispatcher.forward(request, response);
+    }
 
 
     private void insertTask(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	
+    	int projectID = Integer.parseInt(request.getParameter("projectID"));
         String title = request.getParameter("title");
         String description = request.getParameter("description");
         String priorityStr = request.getParameter("priority");
@@ -107,10 +124,15 @@ public class TaskServlet extends HttpServlet {
         newTask.setDueDate(dueDate);
         newTask.setStatus(status);
         newTask.setCreationDate(LocalDate.now());
+        
+        ProjectService projectService = new ProjectService();
+        Project project = projectService.findProjectById(projectID);
+        
+        newTask.setProject(project);
 
         try {
             taskService.createTask(newTask);
-            response.sendRedirect(request.getContextPath() + "/jsp/tasks.jsp");
+            response.sendRedirect(request.getContextPath() + "/tasks?action=list&projectID=" + projectID);
         } catch (IllegalArgumentException e) {
             request.setAttribute("errorMessage", e.getMessage());
             request.getRequestDispatcher("/jsp/errorPage.jsp").forward(request, response);
@@ -160,9 +182,17 @@ public class TaskServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/tasks?action=list&projectID=" + task.getProject().getId());
     }
 
-    private void deleteTask(HttpServletRequest request, HttpServletResponse response)
+    private void deleteTask(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
+        int taskID = Integer.parseInt(request.getParameter("taskID"));
 
+        try {
+            taskService.deleteTask(taskID); 
+            response.sendRedirect(request.getContextPath() + "/tasks?action=list&projectID=" + request.getParameter("projectID"));
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "Error deleting task: " + e.getMessage());
+            request.getRequestDispatcher("/jsp/errorPage.jsp").forward(request, response);
+        }
     }
     
     private void getTaskByID(HttpServletRequest request, HttpServletResponse response)
@@ -173,7 +203,7 @@ public class TaskServlet extends HttpServlet {
     private void listTasks(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int projectID = Integer.parseInt(request.getParameter("projectID"));
         int page = 1;
-        int size = 5; 
+        int size = 5;
         
         if (request.getParameter("page") != null) {   
            page = Integer.parseInt(request.getParameter("page"));                      
@@ -190,6 +220,7 @@ public class TaskServlet extends HttpServlet {
         request.setAttribute("tasks", tasks);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
+        request.setAttribute("projectID", projectID);
 
         // Forward to JSP for rendering
         RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/taskList.jsp");

@@ -22,7 +22,7 @@ public class TaskDaoImpl implements TaskDAO {
 
     @Override
     public void create(Task task) {
-        String query = "INSERT INTO task (title, description, priority, status, creationDate, dueDate) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO task (title, description, priority, status, creationDate, dueDate, project_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, task.getTitle());
             ps.setString(2, task.getDescription());
@@ -30,6 +30,7 @@ public class TaskDaoImpl implements TaskDAO {
             ps.setString(4, task.getStatus().name());
             ps.setDate(5, Date.valueOf(task.getCreationDate()));
             ps.setDate(6, Date.valueOf(task.getDueDate()));
+            ps.setInt(7, task.getProject().getId());
 
             ps.executeUpdate();
             System.out.println("Task created successfully!");
