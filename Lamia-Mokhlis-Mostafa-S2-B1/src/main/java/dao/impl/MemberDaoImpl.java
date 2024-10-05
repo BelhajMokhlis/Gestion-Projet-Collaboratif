@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.Interface.MemberDao;
+import dao.Interface.TeamDAO;
 import model.Membre;
 import model.Team;
 import model.enums.MemberRole;
@@ -13,22 +14,23 @@ import util.DatabaseConnection;
 public class MemberDaoImpl implements MemberDao {
 
     private Connection connection;
-    private TeamDAOImpl teamDAOImpl;
+    private TeamDAO teamDAO;
 
     public MemberDaoImpl() {
         this.connection = DatabaseConnection.getInstance().getConnection();
-        this.teamDAOImpl = new TeamDAOImpl();
+        this.teamDAO = new TeamDAOImpl();
     }
 
     @Override
     public boolean addMember(Membre membre) {
-        String sql = "INSERT INTO Member (lastName, firstName, email, role, team_id) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO `member`( `lastName`, `firstName`, `email`, `role`, `team_id`) VALUES (?,?,?,?,?)";
+        
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, membre.getLastName());
             pstmt.setString(2, membre.getFirstName());
             pstmt.setString(3, membre.getEmail());
             pstmt.setString(4, membre.getRole().toString());
-            pstmt.setInt(5, membre.getTeam().getId());
+            pstmt.setInt(5,membre.getTeam().getId()); 
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -38,7 +40,7 @@ public class MemberDaoImpl implements MemberDao {
 
     @Override
     public boolean removeMember(Membre membre) {
-        String sql = "DELETE FROM Member WHERE id = ?";
+        String sql = "DELETE FROM member WHERE id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, membre.getId());
             return pstmt.executeUpdate() > 0;
@@ -50,14 +52,13 @@ public class MemberDaoImpl implements MemberDao {
 
     @Override
     public boolean updateMember(Membre membre) {
-        String sql = "UPDATE Member SET lastName = ?, firstName = ?, email = ?, role = ?, team_id = ? WHERE id = ?";
+        String sql = "UPDATE member SET lastName = ?, firstName = ?, email = ?, role = ? WHERE id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, membre.getLastName());
             pstmt.setString(2, membre.getFirstName());
             pstmt.setString(3, membre.getEmail());
             pstmt.setString(4, membre.getRole().toString());
-            pstmt.setInt(5, membre.getTeam().getId());
-            pstmt.setInt(6, membre.getId());
+            pstmt.setInt(5, membre.getId());
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,7 +68,7 @@ public class MemberDaoImpl implements MemberDao {
 
     @Override
     public Membre getMember(int id) {
-        String sql = "SELECT * FROM Member WHERE id = ?";
+        String sql = "SELECT * FROM member WHERE id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -84,7 +85,7 @@ public class MemberDaoImpl implements MemberDao {
     @Override
     public List<Membre> getAllMembers() {
         List<Membre> membres = new ArrayList<>();
-        String sql = "SELECT * FROM Member";
+        String sql = "SELECT * FROM member";
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
@@ -102,17 +103,14 @@ public class MemberDaoImpl implements MemberDao {
         membre.setLastName(rs.getString("lastName"));
         membre.setFirstName(rs.getString("firstName"));
         membre.setEmail(rs.getString("email"));
-        membre.setRole(MemberRole.valueOf(rs.getString("role")));
-        int teamId = rs.getInt("team_id");
-        Team team = teamDAOImpl.getTeam(teamId);
-        membre.setTeam(team); 
+        membre.setRole(MemberRole.valueOf(rs.getString("role").toUpperCase()));
         return membre;
     }
 
     @Override
     public List<Membre> getMembersByTeam(int teamId) {
         List<Membre> membres = new ArrayList<>();
-        String sql = "SELECT * FROM Member WHERE team_id = ?";
+        String sql = "SELECT * FROM member WHERE team_id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, teamId);
             try (ResultSet rs = pstmt.executeQuery()) { 
@@ -125,6 +123,9 @@ public class MemberDaoImpl implements MemberDao {
         }
         return membres;
     }
+
+
+ 
     
 
 

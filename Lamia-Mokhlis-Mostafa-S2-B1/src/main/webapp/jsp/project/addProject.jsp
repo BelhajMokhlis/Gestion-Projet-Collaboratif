@@ -8,7 +8,7 @@
 <body>
 <div class="container">
     <h1 class="mt-5">Add New Project</h1>
-    <form action="${pageContext.request.contextPath}/ProjectServlet?action=add" method="post">
+    <form action="${pageContext.request.contextPath}/ProjectsServlet?action=add" method="post">
         <div class="form-group">
             <label for="name">Project Name</label>
             <input type="text" class="form-control" id="name" name="name" required>

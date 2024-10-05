@@ -136,5 +136,12 @@ public class ProjectDAOImpl implements  ProjectDAO{
 	        return projects;
 	    }
 
+		public static void main(String[] args) {
+			// AFFICHET LIST DES PROJECTS
+			ProjectDAOImpl projectDAO = new ProjectDAOImpl();
+			List<Project> projects = projectDAO.findAll();
+		projects.stream().forEach((p)->System.out.println(p.getName()));
+		}
+
 
 }
