@@ -9,7 +9,6 @@
 <div class="container">
     <h1 class="mt-5">Project Management</h1>
     
-    <!-- Link styled as a button to View Projects -->
     <a href="${pageContext.request.contextPath}/ProjectsServlet?action=list" class="btn btn-primary mt-3">View Projects</a>
 <a href="${pageContext.request.contextPath}/ProjectsServlet?action=stats" class="btn btn-info mt-3">View Project Statistics</a>
 </div>
