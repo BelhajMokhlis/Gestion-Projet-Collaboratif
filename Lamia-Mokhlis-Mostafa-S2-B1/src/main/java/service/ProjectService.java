@@ -1,5 +1,7 @@
 package service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -22,12 +24,46 @@ public class ProjectService {
         loadProjectsIntoMap(); 
     }
 
-    public void createProject(Project project) {
+
+    public List<String> validateProject(Project project) {
+        List<String> errors = new ArrayList<>();
+
+        if (project.getName() == null || project.getName().isEmpty()) {
+            errors.add("Project Name is required.");
+        }
+        
+        if (project.getDescription() == null || project.getDescription().isEmpty()) {
+            errors.add("Description is required.");
+        }
+
+
+        LocalDate startDate = project.getStartDate();
+        if (startDate == null) {
+            errors.add("Start Date is required.");
+        }
+
+
+        if (project.getTeamId() <= 0) {
+            errors.add("Please enter a valid Team ID.");
+        }
+
+        return errors;
+    }
+	
+    public void createProject(Project project) throws IllegalArgumentException {
+    	List<String> errors = validateProject(project);
+        if (!errors.isEmpty()) {
+            throw new IllegalArgumentException(String.join(", ", errors));
+        }
         projectRepository.create(project);
         loadProjectsIntoMap(); 
     }
 
-    public void updateProject(Project project) {
+    public void updateProject(Project project)  throws IllegalArgumentException{
+    	 List<String> errors = validateProject(project);
+    	    if (!errors.isEmpty()) {
+    	        throw new IllegalArgumentException(String.join(", ", errors));
+    	    }
         projectRepository.update(project);
         loadProjectsIntoMap(); 
     }
@@ -74,15 +110,7 @@ public class ProjectService {
                 .filter(project -> project.getName().toLowerCase().contains(title.toLowerCase())) 
                 .collect(Collectors.toList());
     }
-    
-    public static void main(String[] args) {
-    	   ProjectService projectService = new ProjectService(); 
-           System.out.println("Projects in the map:");
-           for (Map.Entry<String, Project> entry : projectService.projectMap.entrySet()) {
-               System.out.println("Project Name: " + entry.getKey() + ", Project Details: " + entry.getValue());
-           }
-    }
-    
+
     public Map<Integer, Integer> getTaskCountForEachProject() {
         return projectRepository.countTasksPerProject();
     }

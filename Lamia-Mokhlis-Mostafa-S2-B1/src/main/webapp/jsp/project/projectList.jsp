@@ -10,56 +10,32 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f8f9fa; /* Light background for contrast */
-        }
-        h1 {
-            color: #343a40; /* Darker text color for headers */
-            font-weight: bold; /* Bold header */
+            background-color: #f8f9fa; 
         }
         .container {
-            margin-top: 30px; /* Add some margin at the top */
-            border-radius: 8px; /* Rounded corners for the container */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-            background-color: #ffffff; /* White background for the main content */
-            padding: 20px; /* Padding inside the container */
+            background-color: #ffffff; 
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
         }
-        .alert {
-            margin-bottom: 20px; /* Space between the alert and other content */
+        h1 {
+            font-size: 2.5rem; 
+            margin-bottom: 20px;
         }
-        .table th {
-            background-color: #007bff; /* Header background color */
-            color: white; /* Header text color */
+        .form-inline .form-control {
+            width: 200px;
         }
-        .table tbody tr:hover {
-            background-color: #f1f1f1; /* Highlight row on hover */
-        }
-        .pagination .page-item.active .page-link {
-            background-color: #007bff; /* Active page link color */
-            border-color: #007bff; /* Active border color */
-        }
-        .btn-info {
-            background-color: #17a2b8; /* Info button color */
-            border-color: #17a2b8; /* Info button border color */
-        }
-        .btn-success {
-            background-color: #28a745; /* Success button color */
-            border-color: #28a745; /* Success button border color */
-        }
-        .btn-danger {
-            background-color: #dc3545; /* Danger button color */
-            border-color: #dc3545; /* Danger button border color */
-        }
-        .btn-warning {
-            background-color: #ffc107; /* Warning button color */
-            border-color: #ffc107; /* Warning button border color */
+        .pagination {
+            justify-content: center; 
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1 class="mt-5">Project List</h1>
+<div class="container mt-5">
+    <h1 class="text-center">Project List</h1>
+
     <!-- Search Form -->
-    <form action="ProjectsServlet" method="get" class="form-inline mb-3">
+    <form action="ProjectsServlet" method="get" class="form-inline mb-4 justify-content-center">
         <input type="hidden" name="action" value="search">
         <div class="form-group mx-sm-3 mb-2">
             <label for="searchTitle" class="sr-only">Project Name</label>
@@ -70,19 +46,19 @@
 
     <!-- Debugging Output -->
     <c:if test="${empty projects}">
-        <p>No projects available</p>
+        <p class="text-center text-muted">No projects available</p>
     </c:if>
 
     <!-- Display the feedback message -->
     <c:if test="${not empty sessionScope.msg}">
-        <div class="alert alert-info">
+        <div class="alert alert-info text-center">
             ${sessionScope.msg}
         </div>
     </c:if>
 
     <!-- Project Table -->
     <table class="table table-striped mt-3">
-        <thead>
+        <thead class="thead-dark">
         <tr>
             <th>ID</th>
             <th>Name</th>
@@ -156,7 +132,7 @@
     </nav>
 
     <!-- Add New Project Button -->
-    <a href="jsp/project/addProject.jsp" class="btn btn-success mt-3">Add New Project</a>
+    <a href="ProjectsServlet?action=create" class="btn btn-success mt-3">Add New Project</a>
 </div>
 
 <!-- Bootstrap JS and dependencies -->

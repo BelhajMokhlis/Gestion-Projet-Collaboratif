@@ -1,8 +1,12 @@
 package controller;
 
+import model.Membre;
+import model.Project;
 import model.Task;
 import model.enums.TaskPriority;
 import model.enums.TaskStatus;
+import service.MemberService;
+import service.ProjectService;
 import service.TaskService;
 
 import java.io.IOException;
@@ -24,6 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 public class TaskServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final TaskService taskService;
+    private final ProjectService projectService = new ProjectService();
+    private final MemberService memberService = new MemberService();
 
 
     /**
@@ -41,8 +47,8 @@ public class TaskServlet extends HttpServlet {
         String action = request.getParameter("action");
        
         switch (action) {
-        case "get":
-        	getTaskByID(request, response);
+        case "create":
+            createTaskForm(request, response);
             break;
         case "edit":
             editTask(request, response);
@@ -73,15 +79,33 @@ public class TaskServlet extends HttpServlet {
             case "delete":
                 deleteTask(request, response);
                 break;
+            case "assignMember":
+                assignMember(request, response);
+                break;
+            case "updateStatus":
+                updateTaskStatus(request, response);
+                break;
             default:
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
                 break;
         }
     }
+    
+    private void createTaskForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        int projectID = Integer.parseInt(request.getParameter("projectID"));
+        
+        request.setAttribute("projectID", projectID);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/addTask.jsp");
+        dispatcher.forward(request, response);
+    }
 
 
     private void insertTask(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	
+    	int projectID = Integer.parseInt(request.getParameter("projectID"));
         String title = request.getParameter("title");
         String description = request.getParameter("description");
         String priorityStr = request.getParameter("priority");
@@ -108,9 +132,13 @@ public class TaskServlet extends HttpServlet {
         newTask.setStatus(status);
         newTask.setCreationDate(LocalDate.now());
 
+        Project project = projectService.findProjectById(projectID);
+        
+        newTask.setProject(project);
+
         try {
             taskService.createTask(newTask);
-            response.sendRedirect(request.getContextPath() + "/jsp/tasks.jsp");
+            response.sendRedirect(request.getContextPath() + "/tasks?action=list&projectID=" + projectID);
         } catch (IllegalArgumentException e) {
             request.setAttribute("errorMessage", e.getMessage());
             request.getRequestDispatcher("/jsp/errorPage.jsp").forward(request, response);
@@ -160,20 +188,44 @@ public class TaskServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/tasks?action=list&projectID=" + task.getProject().getId());
     }
 
-    private void deleteTask(HttpServletRequest request, HttpServletResponse response)
+    private void deleteTask(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
+        int taskID = Integer.parseInt(request.getParameter("taskID"));
 
+        try {
+            taskService.deleteTask(taskID); 
+            response.sendRedirect(request.getContextPath() + "/tasks?action=list&projectID=" + request.getParameter("projectID"));
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "Error deleting task: " + e.getMessage());
+            request.getRequestDispatcher("/jsp/errorPage.jsp").forward(request, response);
+        }
     }
     
-    private void getTaskByID(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    private void assignMember(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int taskID = Integer.parseInt(request.getParameter("taskID"));
+        String memberIDStr = request.getParameter("memberID");
 
+        Task task = taskService.getTask(taskID);
+
+        // Check if a member is selected
+        if (memberIDStr != null && !memberIDStr.isEmpty()) {
+            int memberID = Integer.parseInt(memberIDStr);
+            Membre member = memberService.getMember(memberID);
+            task.setMember(member);  // Assign the member to the task
+        } else {
+            task.setMember(null);  // Unassigns the member if no selection
+        }
+
+        taskService.updateTask(task);
+
+        int projectID = task.getProject().getId();
+        response.sendRedirect(request.getContextPath() + "/tasks?action=list&projectID=" + projectID);
     }
 
     private void listTasks(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int projectID = Integer.parseInt(request.getParameter("projectID"));
         int page = 1;
-        int size = 5; 
+        int size = 5;
         
         if (request.getParameter("page") != null) {   
            page = Integer.parseInt(request.getParameter("page"));                      
@@ -183,6 +235,9 @@ public class TaskServlet extends HttpServlet {
            size = Integer.parseInt(request.getParameter("size")); 
         }
 
+        Project project = projectService.findProjectById(projectID);
+        List<Membre> members = memberService.getMembersByTeam(project.getTeamId());
+
         List<Task> tasks = taskService.getPaginatedProjectTasks(projectID, page, size);
         int totalTasks = taskService.getTotalTasksForProject(projectID);
         int totalPages = (int) Math.ceil((double) totalTasks / size);
@@ -190,10 +245,27 @@ public class TaskServlet extends HttpServlet {
         request.setAttribute("tasks", tasks);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
+        request.setAttribute("projectID", projectID);
+        request.setAttribute("members", members);
 
         // Forward to JSP for rendering
         RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/taskList.jsp");
         dispatcher.forward(request, response);
+    }
+    
+    private void updateTaskStatus(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int taskID = Integer.parseInt(request.getParameter("taskID"));
+        String statusStr = request.getParameter("status");
+
+        TaskStatus status = TaskStatus.valueOf(statusStr.toUpperCase());
+
+        Task task = taskService.getTask(taskID);
+        task.setStatus(status);
+
+        taskService.updateTask(task);
+
+        // Redirect to the task list page after status update
+        response.sendRedirect(request.getContextPath() + "/tasks?action=list&projectID=" + task.getProject().getId());
     }
 
 }

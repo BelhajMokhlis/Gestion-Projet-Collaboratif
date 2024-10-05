@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.Project;
 import model.enums.ProjectStatus;
 import service.ProjectService;
+import service.TeamService;
 
 /**
  * Servlet implementation class ProjectsServlet
@@ -23,13 +24,14 @@ import service.ProjectService;
 public class ProjectsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	 private ProjectService projectService;
+	 private TeamService teamService;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
     public ProjectsServlet() {
     	this.projectService=new ProjectService();
-        // TODO Auto-generated constructor stub
+    	 teamService = new TeamService(); 
     }
 
 	/**
@@ -42,23 +44,21 @@ public class ProjectsServlet extends HttpServlet {
 	        if ("list".equals(action)) {
 	        	handleProjectList(request, response);
 	        } else if ("edit".equals(action)) {
-	            int projectId = Integer.parseInt(request.getParameter("id"));
-	            Project project = projectService.findProjectById(projectId);
-	            if (project != null) {
-	                request.setAttribute("project", project);
-	                RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/project/editProject.jsp");
-	                dispatcher.forward(request, response);
-	            }
+	            handleEditProject(request, response);
 	        }else if ("view".equals(action)) {
 	        	   viewProjectDetails(request, response);
 	        }else if  ("search".equals(action)) {
 	        	searchProjects(request, response); 
 	        }else if ("stats".equals(action)) {
 	        	 showProjectStats(request, response); 
+	        } else if ("create".equals(action)) {
+	        	handleCreateProject(request, response);
 	        }
 	}
 
 	
+	
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		  String action = request.getParameter("action");
 
@@ -70,6 +70,27 @@ public class ProjectsServlet extends HttpServlet {
 	            handleDeleteProject(request, response);  
 	        }
 	}
+	
+	private void handleCreateProject(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+        request.setAttribute("teams", teamService.getAllTeams());
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/project/addProject.jsp");
+        dispatcher.forward(request, response);
+		
+	}
+	
+	private void handleEditProject(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        String projectIdParam = request.getParameter("id");
+          int  projectId = Integer.parseInt(projectIdParam);
+       
+        Project project = projectService.findProjectById(projectId);
+        if (project != null) {
+        	 request.setAttribute("project", project);
+             request.setAttribute("teams", teamService.getAllTeams()); 
+        }
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/project/editProject.jsp");
+        dispatcher.forward(request, response);
+    }
 	
 	private void showProjectStats(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    ProjectService projectService = new ProjectService();
@@ -159,7 +180,7 @@ public class ProjectsServlet extends HttpServlet {
 		    response.sendRedirect(request.getContextPath() + "/ProjectsServlet?action=list");
 	}
 	
-	private void updateProject(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	private void updateProject(HttpServletRequest request, HttpServletResponse response) throws   ServletException, IOException  {
 	    int projectId = Integer.parseInt(request.getParameter("id")); 
 	    String name = request.getParameter("name");
 	    String description = request.getParameter("description");
@@ -177,22 +198,28 @@ public class ProjectsServlet extends HttpServlet {
 	        project.setEndDate(endDate != null && !endDate.isEmpty() ? LocalDate.parse(endDate) : null); 
 	        project.setStatus(ProjectStatus.valueOf(status)); 
 	        project.setTeamId(teamId);
-
-	        projectService.updateProject(project);
-
-	        response.sendRedirect(request.getContextPath() + "/ProjectsServlet?action=list");
+	        try {
+	            projectService.updateProject(project);
+	            response.sendRedirect(request.getContextPath() + "/ProjectsServlet?action=list");
+	        } catch (IllegalArgumentException e) {
+	            String errorMessage = e.getMessage();
+	            request.setAttribute("errorMessage", errorMessage);
+	            request.setAttribute("project", project); 
+	            RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/project/editProject.jsp"); 
+	            dispatcher.forward(request, response);
+	        }
 	    } else {
 	        response.sendError(HttpServletResponse.SC_NOT_FOUND, "Project not found");
 	    }
 	}
 
-	  private void addProject(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	  private void addProject(HttpServletRequest request, HttpServletResponse response) throws  ServletException, IOException {
     	  String name = request.getParameter("name");
     	    String description = request.getParameter("description");
     	    String startDate = request.getParameter("startDate");
     	    String endDate = request.getParameter("endDate");
     	    String status = request.getParameter("status");
-    	    int teamId = Integer.parseInt(request.getParameter("team_id")); 
+    	    int teamId = Integer.parseInt(request.getParameter("teamId")); 
 
     	    Project project = new Project();
     	    project.setName(name);
@@ -202,8 +229,14 @@ public class ProjectsServlet extends HttpServlet {
     	    project.setStatus(ProjectStatus.valueOf(status)); 
     	    project.setTeamId(teamId);
 
-    	     
-    	    projectService.createProject(project); 
-    	    response.sendRedirect(request.getContextPath() +"/jsp/project/projectList.jsp");
+    	    try {
+    	        projectService.createProject(project);
+        	    response.sendRedirect(request.getContextPath() +"/jsp/project/projectList.jsp");
+    	    } catch (IllegalArgumentException e) {
+    	        request.setAttribute("errorMessage", e.getMessage());
+    	        
+    	        RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/project/addProject.jsp");
+    	        dispatcher.forward(request, response);
+    	    }
     }
 }
