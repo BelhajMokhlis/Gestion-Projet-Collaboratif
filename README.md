@@ -63,9 +63,7 @@ Le projet est organisé selon une architecture MVC (Modèle-Vue-Contrôleur) :
 ## Structure de la base de données
 
 ```sql
-CREATE DATABASE projectmanagement;
-
-USE projectmanagement;
+create database projectmanagement
 
 -- Table for 'Team'
 CREATE TABLE Team (
@@ -80,8 +78,7 @@ CREATE TABLE Member (
     firstName VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     role ENUM('project_manager', 'developer', 'designer') NOT NULL,
-    team_id INT,
-    FOREIGN KEY (team_id) REFERENCES Team(id) ON DELETE CASCADE
+    team_id INT REFERENCES Team(id) on delete cascade
 );
 
 -- Table for 'Project'
@@ -92,8 +89,7 @@ CREATE TABLE Project (
     startDate DATE NOT NULL,
     endDate DATE,
     status ENUM('in_preparation', 'in_progress', 'on_hold', 'completed', 'canceled') NOT NULL,
-    team_id INT,
-    FOREIGN KEY (team_id) REFERENCES Team(id) ON DELETE SET NULL
+    team_id INT REFERENCES Team(id) ON DELETE SET NULL
 );
 
 -- Table for 'Task'
@@ -105,10 +101,8 @@ CREATE TABLE Task (
     status ENUM('to_do', 'in_progress', 'completed') NOT NULL,
     creationDate DATE NOT NULL,
     dueDate DATE NOT NULL,
-    project_id INT,
-    member_id INT,
-    FOREIGN KEY (project_id) REFERENCES Project(id) ON DELETE CASCADE,
-    FOREIGN KEY (member_id) REFERENCES Member(id) ON DELETE SET NULL
+    project_id INT REFERENCES Project(id) ON DELETE CASCADE,
+    member_id INT REFERENCES Member(id) ON DELETE SET NULL
 );
 
 -- Indexes
@@ -116,7 +110,7 @@ CREATE INDEX idx_project_name ON Project(name);
 CREATE INDEX idx_task_project ON Task(project_id);
 CREATE INDEX idx_member_email ON Member(email);
 
--- Create user
+-- create user
 CREATE USER 'user_app'@'localhost' IDENTIFIED BY '12345';
 
 -- Grant Privileges
@@ -124,6 +118,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON projectmanagement.* TO 'user_app'@'local
 
 -- Apply the changes
 FLUSH PRIVILEGES;
+
 ```
 
 ## Captures d'écran
@@ -145,8 +140,4 @@ Ce projet a été développé par une équipe d'étudiants :
 ## Liens
 - [Dépôt GitHub](https://github.com/BelhajMokhlis/Gestion-Projet-Collaboratif)
 
-## Licence
-Ce projet est sous licence [insérez le type de licence ici, par exemple MIT].
 
-## Contribuer
-Les contributions sont les bienvenues ! Veuillez consulter le fichier CONTRIBUTING.md pour les détails sur notre code de conduite et le processus de soumission des pull requests.
