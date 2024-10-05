@@ -1,9 +1,11 @@
 package controller;
 
+import model.Membre;
 import model.Project;
 import model.Task;
 import model.enums.TaskPriority;
 import model.enums.TaskStatus;
+import service.MemberService;
 import service.ProjectService;
 import service.TaskService;
 
@@ -26,6 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 public class TaskServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final TaskService taskService;
+    private final ProjectService projectService = new ProjectService();
+    private final MemberService memberService = new MemberService();
 
 
     /**
@@ -43,9 +47,6 @@ public class TaskServlet extends HttpServlet {
         String action = request.getParameter("action");
        
         switch (action) {
-        case "get":
-        	getTaskByID(request, response);
-            break;
         case "create":
             createTaskForm(request, response);
             break;
@@ -77,6 +78,9 @@ public class TaskServlet extends HttpServlet {
                 break;
             case "delete":
                 deleteTask(request, response);
+                break;
+            case "assignMember":
+                assignMember(request, response);
                 break;
             default:
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
@@ -124,8 +128,7 @@ public class TaskServlet extends HttpServlet {
         newTask.setDueDate(dueDate);
         newTask.setStatus(status);
         newTask.setCreationDate(LocalDate.now());
-        
-        ProjectService projectService = new ProjectService();
+
         Project project = projectService.findProjectById(projectID);
         
         newTask.setProject(project);
@@ -195,9 +198,25 @@ public class TaskServlet extends HttpServlet {
         }
     }
     
-    private void getTaskByID(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    private void assignMember(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int taskID = Integer.parseInt(request.getParameter("taskID"));
+        String memberIDStr = request.getParameter("memberID");
 
+        Task task = taskService.getTask(taskID);
+
+        // Check if a member is selected
+        if (memberIDStr != null && !memberIDStr.isEmpty()) {
+            int memberID = Integer.parseInt(memberIDStr);
+            Membre member = memberService.getMember(memberID);
+            task.setMember(member);  // Assign the member to the task
+        } else {
+            task.setMember(null);  // Unassigns the member if no selection
+        }
+
+        taskService.updateTask(task);
+
+        int projectID = task.getProject().getId();
+        response.sendRedirect(request.getContextPath() + "/tasks?action=list&projectID=" + projectID);
     }
 
     private void listTasks(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -213,6 +232,9 @@ public class TaskServlet extends HttpServlet {
            size = Integer.parseInt(request.getParameter("size")); 
         }
 
+        Project project = projectService.findProjectById(projectID);
+        List<Membre> members = memberService.getMembersByTeam(project.getTeamId());
+
         List<Task> tasks = taskService.getPaginatedProjectTasks(projectID, page, size);
         int totalTasks = taskService.getTotalTasksForProject(projectID);
         int totalPages = (int) Math.ceil((double) totalTasks / size);
@@ -221,6 +243,7 @@ public class TaskServlet extends HttpServlet {
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("projectID", projectID);
+        request.setAttribute("members", members);
 
         // Forward to JSP for rendering
         RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/taskList.jsp");

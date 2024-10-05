@@ -11,11 +11,12 @@
 <body>
 <body>
     <div class="container">
-    	<div class="row justify-between">
-    		<h1>Project Tasks</h1>
-    		<div class="text-right">
-<a href="${pageContext.request.contextPath}/tasks?action=create&projectID=${projectID}" class="btn btn-success">Add New Task</a>			</div>
-    	</div>
+    	<div class="row d-flex justify-content-between align-items-center w-100">
+    		<h1 class="col">Project Tasks</h1>
+    		<div class="col text-right">
+        		<a href="${pageContext.request.contextPath}/tasks?action=create&projectID=${projectID}" class="btn btn-success">Add New Task</a>
+    		</div>
+		</div>
         
         <table class="table table-striped">
             <thead>
@@ -24,6 +25,7 @@
                     <th>Description</th>
                     <th>Status</th>
                     <th>Due Date</th>
+                    <th>Assigned To</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -34,6 +36,19 @@
             			<td>${task.description}</td>
             			<td>${task.status}</td>
             			<td>${task.dueDate}</td>
+            			<td>
+    						<form action="${pageContext.request.contextPath}/tasks" method="post">
+                            <input type="hidden" name="action" value="assignMember">
+                            <input type="hidden" name="taskID" value="${task.taskID}">
+                            <select name="memberID" class="form-control">
+                                <option value="">-- Select Member --</option>
+                                <c:forEach var="member" items="${members}">
+                                    <option value="${member.id}" <c:if test="${task.member != null && task.member.id == member.id}">selected</c:if>>${member.lastName} ${member.firstName}</option>
+                                </c:forEach>
+                            </select>
+                            <button type="submit" class="btn btn-primary mt-1">Assign</button>
+                        </form>
+						</td>
             			<td>
                 			<form action="${pageContext.request.contextPath}/tasks" method="get" style="display:inline;">
                     			<input type="hidden" name="action" value="edit">
