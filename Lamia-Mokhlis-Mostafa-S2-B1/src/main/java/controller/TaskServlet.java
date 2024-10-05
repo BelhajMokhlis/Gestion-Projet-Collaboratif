@@ -82,6 +82,9 @@ public class TaskServlet extends HttpServlet {
             case "assignMember":
                 assignMember(request, response);
                 break;
+            case "updateStatus":
+                updateTaskStatus(request, response);
+                break;
             default:
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
                 break;
@@ -248,6 +251,21 @@ public class TaskServlet extends HttpServlet {
         // Forward to JSP for rendering
         RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/taskList.jsp");
         dispatcher.forward(request, response);
+    }
+    
+    private void updateTaskStatus(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int taskID = Integer.parseInt(request.getParameter("taskID"));
+        String statusStr = request.getParameter("status");
+
+        TaskStatus status = TaskStatus.valueOf(statusStr.toUpperCase());
+
+        Task task = taskService.getTask(taskID);
+        task.setStatus(status);
+
+        taskService.updateTask(task);
+
+        // Redirect to the task list page after status update
+        response.sendRedirect(request.getContextPath() + "/tasks?action=list&projectID=" + task.getProject().getId());
     }
 
 }

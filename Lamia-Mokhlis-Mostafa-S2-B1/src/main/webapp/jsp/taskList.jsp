@@ -34,7 +34,20 @@
         			<tr>
             			<td>${task.title}</td>
             			<td>${task.description}</td>
-            			<td>${task.status}</td>
+            			<td>
+                			<form action="${pageContext.request.contextPath}/tasks" method="post">
+                    			<input type="hidden" name="action" value="updateStatus">
+                    			<input type="hidden" name="taskID" value="${task.taskID}">
+                    
+                    			<select name="status" class="form-control">
+                        			<option value="TO_DO" ${task.status == 'TO_DO' ? 'selected' : ''}>To Do</option>
+                        			<option value="IN_PROGRESS" ${task.status == 'IN_PROGRESS' ? 'selected' : ''}>In Progress</option>
+                        			<option value="COMPLETED" ${task.status == 'COMPLETED' ? 'selected' : ''}>Completed</option>
+                    			</select>
+                    
+                    			<button type="submit" class="btn btn-primary mt-1">Update</button>
+                			</form>
+            			</td>
             			<td>${task.dueDate}</td>
             			<td>
     						<form action="${pageContext.request.contextPath}/tasks" method="post">
