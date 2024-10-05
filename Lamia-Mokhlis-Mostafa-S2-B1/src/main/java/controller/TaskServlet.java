@@ -118,7 +118,7 @@ public class TaskServlet extends HttpServlet {
     }
 
     private void editTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int taskID = Integer.parseInt(request.getParameter("taskId"));
+        int taskID = Integer.parseInt(request.getParameter("taskID"));
 
         Task task = taskService.getTask(taskID);
 
@@ -130,7 +130,7 @@ public class TaskServlet extends HttpServlet {
 
     private void updateTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        int taskID = Integer.parseInt(request.getParameter("taskId"));
+        int taskID = Integer.parseInt(request.getParameter("taskID"));
         String title = request.getParameter("title");
         String description = request.getParameter("description");
         String priorityStr = request.getParameter("priority");
@@ -157,7 +157,7 @@ public class TaskServlet extends HttpServlet {
         taskService.updateTask(task);
 
         // Redirect to the task list page after update
-        response.sendRedirect(request.getContextPath() + "/tasks?action=list");
+        response.sendRedirect(request.getContextPath() + "/tasks?action=list&projectID=" + task.getProject().getId());
     }
 
     private void deleteTask(HttpServletRequest request, HttpServletResponse response)

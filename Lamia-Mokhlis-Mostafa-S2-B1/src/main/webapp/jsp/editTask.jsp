@@ -11,7 +11,7 @@
         <h2 class="mb-4">Edit Task</h2>
 
         <form action="${pageContext.request.contextPath}/tasks" method="post">
-            <input type="hidden" name="taskId" value="${task.id}">
+            <input type="hidden" name="taskID" value="${task.taskID}">
             <input type="hidden" name="action" value="update">
             
             <div class="mb-3">
@@ -35,12 +35,12 @@
             
             <div class="mb-3">
                 <label for="dueDate" class="form-label">Due Date (MM/DD/YYYY)</label>
-                <input type="text" id="dueDate" name="dueDate" class="form-control" value="${task.dueDate.format(java.time.format.DateTimeFormatter.ofPattern('MM/dd/yyyy'))}" required>
+                <input type="text" id="dueDate" name="dueDate" class="form-control" value="${task.dueDate}" required>
             </div>
 
             <!-- Submit Button -->
             <button type="submit" class="btn btn-primary">Update Task</button>
-            <a href="${pageContext.request.contextPath}/tasks?action=list&projectID=6" class="btn btn-secondary">Cancel</a>
+            <a href="${pageContext.request.contextPath}/tasks?action=list&projectID=${task.project.getId()}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 

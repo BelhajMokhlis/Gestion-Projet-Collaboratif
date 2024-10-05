@@ -48,8 +48,8 @@ public class TaskDaoImpl implements TaskDAO {
                 task.setTaskID(rs.getInt("id"));
                 task.setTitle(rs.getString("title"));
                 task.setDescription(rs.getString("description"));
-                task.setPriority(TaskPriority.valueOf(rs.getString("priority")));
-                task.setStatus(TaskStatus.valueOf(rs.getString("status")));
+                task.setPriority(TaskPriority.fromString(rs.getString("priority")));
+                task.setStatus(TaskStatus.fromString(rs.getString("status")));
                 task.setCreationDate(rs.getDate("creationDate").toLocalDate());
                 task.setDueDate(rs.getDate("dueDate").toLocalDate());
 
