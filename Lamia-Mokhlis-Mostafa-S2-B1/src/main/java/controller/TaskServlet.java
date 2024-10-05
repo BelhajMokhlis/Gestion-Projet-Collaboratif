@@ -10,7 +10,6 @@ import service.ProjectService;
 import service.TaskService;
 
 import java.io.IOException;
-import java.lang.reflect.Member;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -29,6 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 public class TaskServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final TaskService taskService;
+    private final ProjectService projectService = new ProjectService();
+    private final MemberService memberService = new MemberService();
 
 
     /**
@@ -127,8 +128,7 @@ public class TaskServlet extends HttpServlet {
         newTask.setDueDate(dueDate);
         newTask.setStatus(status);
         newTask.setCreationDate(LocalDate.now());
-        
-        ProjectService projectService = new ProjectService();
+
         Project project = projectService.findProjectById(projectID);
         
         newTask.setProject(project);
@@ -207,7 +207,6 @@ public class TaskServlet extends HttpServlet {
         // Check if a member is selected
         if (memberIDStr != null && !memberIDStr.isEmpty()) {
             int memberID = Integer.parseInt(memberIDStr);
-            MemberService memberService = new MemberService();
             Membre member = memberService.getMember(memberID);
             task.setMember(member);  // Assign the member to the task
         } else {
@@ -233,9 +232,10 @@ public class TaskServlet extends HttpServlet {
            size = Integer.parseInt(request.getParameter("size")); 
         }
 
+        Project project = projectService.findProjectById(projectID);
+        List<Membre> members = memberService.getMembersByTeam(project.getTeamId());
+
         List<Task> tasks = taskService.getPaginatedProjectTasks(projectID, page, size);
-        MemberService memberService = new MemberService();
-        List<Membre> members = memberService.getAllMembers();
         int totalTasks = taskService.getTotalTasksForProject(projectID);
         int totalPages = (int) Math.ceil((double) totalTasks / size);
 
