@@ -185,6 +185,7 @@ public class TeamServlet extends HttpServlet {
                 List<Membre> members = memberService.getMembersByTeam(team.getId());
                 request.setAttribute("members",members);
                 
+                
                 request.getRequestDispatcher("/jsp/team/team.jsp").forward(request, response);
             } else {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Team not found  ");
@@ -323,7 +324,6 @@ public class TeamServlet extends HttpServlet {
         membre.setEmail(email);
         membre.setRole(role);
         boolean update = memberService.updateMember(membre);
-        System.out.println(update);
         if (update) {
             request.setAttribute("message", "Member updated successfully");
         } else {

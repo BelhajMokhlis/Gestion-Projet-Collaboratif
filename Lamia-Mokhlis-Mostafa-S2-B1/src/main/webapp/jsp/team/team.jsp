@@ -15,6 +15,14 @@
 </head>
 <body>
     <div class="container mt-4">
+      <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/index.jsp"><i class="fas fa-home"></i> Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><a href="${pageContext.request.contextPath}/teams">Teams List</a></li>
+                <li class="breadcrumb-item active" aria-current="page">${team.name}</li>
+                
+            </ol>
+        </nav>
         <h1 class="mb-4 text-center">${team.name}</h1>
         
         <c:if test="${not empty members}">
@@ -63,11 +71,10 @@
         </c:if>
 
         <div class="text-center mt-4">
-            <form action="addMember" method="post">
+            <form action="?action=addMember" method="post">
                 <input type="text" name="firstName" placeholder="First Name" required>
                 <input type="text" name="lastName" placeholder="Last Name" required>
                 <input type="email" name="email" placeholder="Email" required>
-                <input type="text" name="position" placeholder="Position" required>
                 <select name="role" required>
                     <option value="" disabled selected>Select Role</option>
                     <option value="PROJECT_MANAGER">Project Manager</option>
