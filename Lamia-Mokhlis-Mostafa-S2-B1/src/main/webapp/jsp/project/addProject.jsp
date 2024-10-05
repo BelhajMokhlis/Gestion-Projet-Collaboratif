@@ -10,11 +10,37 @@
     <title>Add New Project</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+        h1 {
+            color: #007bff;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        .alert {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
     <h1 class="mt-5">Add New Project</h1>
-       <!-- Display Error Messages -->
+    <!-- Display Error Messages -->
     <c:if test="${not empty errorMessage}">
         <div class="alert alert-danger">
             <strong>Error!</strong> ${errorMessage}
@@ -23,11 +49,11 @@
     <form action="${pageContext.request.contextPath}/ProjectsServlet?action=add" method="post">
         <div class="form-group">
             <label for="name">Project Name</label>
-            <input type="text" class="form-control" id="name" name="name" >
+            <input type="text" class="form-control" id="name" name="name" required>
         </div>
         <div class="form-group">
             <label for="description">Description</label>
-            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
         </div>
         <div class="form-group">
             <label for="startDate">Start Date</label>
@@ -36,7 +62,7 @@
         </div>
         <div class="form-group">
             <label for="endDate">End Date</label>
-            <input type="date" class="form-control" id="endDate" name="endDate">
+            <input type="date" class="form-control" id="endDate" name="endDate" required>
         </div>
         <div class="form-group">
             <label for="status">Status</label>
@@ -48,7 +74,7 @@
                 <option value="CANCELED">Canceled</option>
             </select>
         </div>
-          <!-- Team ID Input -->
+        <!-- Team ID Input -->
         <div class="form-group">
             <label for="teamId">Team:</label>
             <select class="form-control" id="teamId" name="teamId" required>

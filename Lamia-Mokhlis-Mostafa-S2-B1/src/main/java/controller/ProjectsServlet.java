@@ -53,9 +53,6 @@ public class ProjectsServlet extends HttpServlet {
 	        	 showProjectStats(request, response); 
 	        } else if ("create".equals(action)) {
 	        	handleCreateProject(request, response);
-	        	  request.setAttribute("teams", teamService.getAllTeams());
-	              RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/project/addProject.jsp");
-	              dispatcher.forward(request, response);
 	        }
 	}
 

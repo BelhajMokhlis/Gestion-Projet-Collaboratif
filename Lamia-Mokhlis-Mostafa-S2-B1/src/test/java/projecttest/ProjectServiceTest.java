@@ -10,24 +10,42 @@ import static org.junit.Assert.*;
 public class ProjectServiceTest {
 
 
-    private ProjectService projectService;
-
+    private ProjectDAOImpl projectDAO;
     @Before
     public void setUp() {
-        projectService = new ProjectService(); 
+    	  projectDAO = new ProjectDAOImpl();
+    }
+
+
+    @Test
+    void testAddProject() {
+        Project project = new Project("Project A", "Description of Project A", LocalDate.now(), LocalDate.now().plusDays(30), ProjectStatus.ACTIVE, 17);
+        assertTrue(projectDAO.createProject(project)); 
     }
 
     @Test
-    public void testCreateProject() {
-        Project project = new Project();
-        project.setName("Test Project");
-        project.setDescription("This is a test project");
-
-        projectService.createProject(project);
+    void testGetAllProjects() {
+        Project project1 = new Project("Project A", "Description of Project A", LocalDate.now(), LocalDate.now().plusDays(30), ProjectStatus.ACTIVE, 17);
+        Project project2 = new Project("Project B", "Description of Project B", LocalDate.now(), LocalDate.now().plusDays(30), ProjectStatus.ACTIVE, 18);
+        projectDAO.createProject(project1);
+        projectDAO.createProject(project2);
         
-        Project retrievedProject = projectService.findProjectById(project.getId());
-        assertNotNull("Project should be created", retrievedProject);
-        assertEquals("Project name should match", "Test Project", retrievedProject.getName());
+        List<Project> projects = projectDAO.findAllProjects(); 
+        assertTrue(projects.contains(project1));
+        assertTrue(projects.contains(project2));
     }
 
+    @Test
+    void testRemoveProject() {
+        Project project = new Project("Project A", "Description of Project A", LocalDate.now(), LocalDate.now().plusDays(30), ProjectStatus.ACTIVE, 17);
+        projectDAO.createProject(project);
+        
+        assertTrue(projectDAO.deleteProject(project.getId())); 
+    }
+    
+    
+    
+    
+    
+    
 }

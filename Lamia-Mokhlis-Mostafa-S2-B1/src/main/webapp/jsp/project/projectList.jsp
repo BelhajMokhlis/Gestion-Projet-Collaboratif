@@ -8,13 +8,34 @@
     <title>Project List</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  
+    <style>
+        body {
+            background-color: #f8f9fa; 
+        }
+        .container {
+            background-color: #ffffff; 
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h1 {
+            font-size: 2.5rem; 
+            margin-bottom: 20px;
+        }
+        .form-inline .form-control {
+            width: 200px;
+        }
+        .pagination {
+            justify-content: center; 
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <h1 class="mt-5">Project List</h1>
+<div class="container mt-5">
+    <h1 class="text-center">Project List</h1>
+
     <!-- Search Form -->
-    <form action="ProjectsServlet" method="get" class="form-inline mb-3">
+    <form action="ProjectsServlet" method="get" class="form-inline mb-4 justify-content-center">
         <input type="hidden" name="action" value="search">
         <div class="form-group mx-sm-3 mb-2">
             <label for="searchTitle" class="sr-only">Project Name</label>
@@ -25,19 +46,19 @@
 
     <!-- Debugging Output -->
     <c:if test="${empty projects}">
-        <p>No projects available</p>
+        <p class="text-center text-muted">No projects available</p>
     </c:if>
 
     <!-- Display the feedback message -->
     <c:if test="${not empty sessionScope.msg}">
-        <div class="alert alert-info">
+        <div class="alert alert-info text-center">
             ${sessionScope.msg}
         </div>
     </c:if>
 
     <!-- Project Table -->
     <table class="table table-striped mt-3">
-        <thead>
+        <thead class="thead-dark">
         <tr>
             <th>ID</th>
             <th>Name</th>

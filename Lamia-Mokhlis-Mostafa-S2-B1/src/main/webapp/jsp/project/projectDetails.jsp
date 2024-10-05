@@ -13,10 +13,40 @@
     <title>Project Details</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="path/to/your/css/styles.css"> <!-- Link your CSS file if needed -->
+    <style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .card {
+        border: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .card-title {
+        font-size: 1.5rem;
+        color: #343a40;
+    }
+    .card-text {
+        font-size: 1.1rem;
+        color: #6c757d;
+    }
+    .btn-secondary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+    .btn-secondary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+    h1 {
+        font-weight: bold;
+        color: #007bff;
+    }
+</style>
+
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="mb-4">Project Details</h1>
+        <h1 class="mb-4 text-center">Project Details</h1>
 
         <div class="card">
             <div class="card-body">
@@ -27,9 +57,8 @@
                 <p class="card-text"><strong>End Date:</strong> <%= project.getEndDate().format(dateFormatter) %></p>
                 <p class="card-text"><strong>Status:</strong> <%= project.getStatus() %></p>
 
-                <div class="mt-4">
+                <div class="mt-4 text-center">
                     <a href="ProjectsServlet?action=list" class="btn btn-secondary">Back to Projects</a>
-                    
                 </div>
             </div>
         </div>

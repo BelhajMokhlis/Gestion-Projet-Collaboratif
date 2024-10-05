@@ -110,15 +110,7 @@ public class ProjectService {
                 .filter(project -> project.getName().toLowerCase().contains(title.toLowerCase())) 
                 .collect(Collectors.toList());
     }
-    
-    public static void main(String[] args) {
-    	   ProjectService projectService = new ProjectService(); 
-           System.out.println("Projects in the map:");
-           for (Map.Entry<String, Project> entry : projectService.projectMap.entrySet()) {
-               System.out.println("Project Name: " + entry.getKey() + ", Project Details: " + entry.getValue());
-           }
-    }
-    
+
     public Map<Integer, Integer> getTaskCountForEachProject() {
         return projectRepository.countTasksPerProject();
     }
