@@ -1,38 +1,84 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project List</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light background for contrast */
+        }
+        h1 {
+            color: #343a40; /* Darker text color for headers */
+            font-weight: bold; /* Bold header */
+        }
+        .container {
+            margin-top: 30px; /* Add some margin at the top */
+            border-radius: 8px; /* Rounded corners for the container */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            background-color: #ffffff; /* White background for the main content */
+            padding: 20px; /* Padding inside the container */
+        }
+        .alert {
+            margin-bottom: 20px; /* Space between the alert and other content */
+        }
+        .table th {
+            background-color: #007bff; /* Header background color */
+            color: white; /* Header text color */
+        }
+        .table tbody tr:hover {
+            background-color: #f1f1f1; /* Highlight row on hover */
+        }
+        .pagination .page-item.active .page-link {
+            background-color: #007bff; /* Active page link color */
+            border-color: #007bff; /* Active border color */
+        }
+        .btn-info {
+            background-color: #17a2b8; /* Info button color */
+            border-color: #17a2b8; /* Info button border color */
+        }
+        .btn-success {
+            background-color: #28a745; /* Success button color */
+            border-color: #28a745; /* Success button border color */
+        }
+        .btn-danger {
+            background-color: #dc3545; /* Danger button color */
+            border-color: #dc3545; /* Danger button border color */
+        }
+        .btn-warning {
+            background-color: #ffc107; /* Warning button color */
+            border-color: #ffc107; /* Warning button border color */
+        }
+    </style>
 </head>
 <body>
 <div class="container">
-   
-
     <h1 class="mt-5">Project List</h1>
- <!-- Search Form -->
-<form action="ProjectsServlet" method="get" class="form-inline mb-3">
-    <input type="hidden" name="action" value="search">
-    <div class="form-group mx-sm-3 mb-2">
-        <label for="searchTitle" class="sr-only">Project Name</label>
-        <input type="text" class="form-control" id="searchTitle" name="title" placeholder="Search by title">
-    </div>
-    <button type="submit" class="btn btn-primary mb-2">Search</button>
-</form>
+    <!-- Search Form -->
+    <form action="ProjectsServlet" method="get" class="form-inline mb-3">
+        <input type="hidden" name="action" value="search">
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="searchTitle" class="sr-only">Project Name</label>
+            <input type="text" class="form-control" id="searchTitle" name="title" placeholder="Search by title">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Search</button>
+    </form>
 
     <!-- Debugging Output -->
     <c:if test="${empty projects}">
         <p>No projects available</p>
     </c:if>
-    <!-- Display the feedback message -->
-<c:if test="${not empty sessionScope.msg}">
-    <div class="alert alert-info">
-        ${sessionScope.msg}
-    </div>
-</c:if>
 
+    <!-- Display the feedback message -->
+    <c:if test="${not empty sessionScope.msg}">
+        <div class="alert alert-info">
+            ${sessionScope.msg}
+        </div>
+    </c:if>
 
     <!-- Project Table -->
     <table class="table table-striped mt-3">
@@ -108,8 +154,9 @@
             </li>
         </ul>
     </nav>
+
     <!-- Add New Project Button -->
-    <a href="addProject.jsp" class="btn btn-success mt-3">Add New Project</a>
+    <a href="jsp/project/addProject.jsp" class="btn btn-success mt-3">Add New Project</a>
 </div>
 
 <!-- Bootstrap JS and dependencies -->
