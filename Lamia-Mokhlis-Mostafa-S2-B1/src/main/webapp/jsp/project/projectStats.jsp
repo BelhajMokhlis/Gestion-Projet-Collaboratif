@@ -19,13 +19,15 @@
             <tr>
                 <th scope="col">Project Name</th>
                 <th scope="col">Task Count</th>
+                <th>Member Count</th>
             </tr>
         </thead>
         <tbody>
             <c:forEach var="project" items="${projects}">
                 <tr>
                     <td>${project.name}</td>
-                    <td>${taskCounts[project.id] != null ? taskCounts[project.id] : 0}</td> <!-- Display task count or 0 if none -->
+                    <td>${taskCounts[project.id] != null ? taskCounts[project.id] : 0}</td> 
+                  	<td>${memberCounts[project.id] != null ? memberCounts[project.id] : 0}</td> 
                 </tr>
             </c:forEach>
         </tbody>

@@ -74,7 +74,10 @@ public class ProjectsServlet extends HttpServlet {
 	private void showProjectStats(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    ProjectService projectService = new ProjectService();
 	    Map<Integer, Integer> taskCounts = projectService.getTaskCountForEachProject();
-	    List<Project> projects = projectService.findAllProjects();	    
+	    Map<Integer, Integer> memberCounts = projectService.getMemberCountForEachProject();
+	    List<Project> projects = projectService.findAllProjects();	 
+	    
+	    request.setAttribute("memberCounts", memberCounts);
 	    request.setAttribute("projects", projects);
 	    request.setAttribute("taskCounts", taskCounts);	    
 	    RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/project/projectStats.jsp");

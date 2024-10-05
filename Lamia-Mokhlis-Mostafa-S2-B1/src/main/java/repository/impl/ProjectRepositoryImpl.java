@@ -114,5 +114,25 @@ public class ProjectRepositoryImpl implements ProjectRepository  {
 
 	        return taskCounts;
 	    }
+	    
+	    public Map<Integer, Integer> countMembersPerProject() {
+	        String sql = "SELECT project_id, COUNT(DISTINCT member_id) AS member_count FROM Task GROUP BY project_id";
+	        Map<Integer, Integer> memberCounts = new HashMap<>();
+
+	        try (PreparedStatement statement = connection.prepareStatement(sql);
+	             ResultSet rs = statement.executeQuery()) {
+
+	            while (rs.next()) {
+	                int projectId = rs.getInt("project_id");
+	                int memberCount = rs.getInt("member_count");
+	                memberCounts.put(projectId, memberCount);
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+
+	        return memberCounts;
+	    }
+
 
 }

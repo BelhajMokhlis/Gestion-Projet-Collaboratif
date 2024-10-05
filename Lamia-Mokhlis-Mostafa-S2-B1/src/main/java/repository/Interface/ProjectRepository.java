@@ -15,4 +15,5 @@ public interface ProjectRepository {
    int countAllProjects();
    List<Project> findProjectsWithPagination(int page, int pageSize);
    Map<Integer, Integer> countTasksPerProject();
+   Map<Integer, Integer> countMembersPerProject();
 }

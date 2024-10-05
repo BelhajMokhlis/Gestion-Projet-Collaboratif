@@ -86,5 +86,9 @@ public class ProjectService {
     public Map<Integer, Integer> getTaskCountForEachProject() {
         return projectRepository.countTasksPerProject();
     }
+    
+    public Map<Integer, Integer> getMemberCountForEachProject() {
+        return projectRepository.countMembersPerProject();
+    }
 
 }
