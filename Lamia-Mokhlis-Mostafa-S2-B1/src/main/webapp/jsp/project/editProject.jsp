@@ -1,5 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="java.util.List" %>
+<%@ page import="model.Project" %>
+<%@ page import="model.Team" %>
 <html>
 <head>
     <title>Update Project</title>
@@ -54,8 +57,14 @@
 </div>
   <!-- Team ID Input -->
         <div class="form-group">
-            <label for="teamId">Team ID:</label>
-            <input type="number" class="form-control" id="teamId" name="teamId" value="${project.teamId}" required>
+            <label for="teamId">Team:</label>
+            <select class="form-control" id="teamId" name="teamId" required>
+                <c:forEach var="team" items="${teams}">
+                    <option value="${team.id}" ${team.id == project.teamId ? 'selected' : ''}>
+                        ${team.name}
+                    </option>
+                </c:forEach>
+            </select>
         </div>
         <button type="submit" class="btn btn-primary">Update Project</button>
         <a href="ProjectsServlet?action=list" class="btn btn-secondary">Cancel</a>

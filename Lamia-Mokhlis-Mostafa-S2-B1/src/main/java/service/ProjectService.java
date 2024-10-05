@@ -1,5 +1,7 @@
 package service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +24,40 @@ public class ProjectService {
         loadProjectsIntoMap(); 
     }
 
-    public void createProject(Project project) {
+
+    public List<String> validateProject(Project project) {
+        List<String> errors = new ArrayList<>();
+
+        // Validate project name
+        if (project.getName() == null || project.getName().isEmpty()) {
+            errors.add("Project Name is required.");
+        }
+
+        // Validate start date
+        LocalDate startDate = project.getStartDate();
+        if (startDate == null) {
+            errors.add("Start Date is required.");
+        }
+
+        // Validate end date
+        LocalDate endDate = project.getEndDate();
+        if (endDate != null && endDate.isBefore(startDate)) {
+            errors.add("End Date cannot be before Start Date.");
+        }
+
+        // Validate team ID
+        if (project.getTeamId() <= 0) {
+            errors.add("Please enter a valid Team ID.");
+        }
+
+        return errors;
+    }
+	
+    public void createProject(Project project) throws IllegalArgumentException {
+    	List<String> errors = validateProject(project);
+        if (!errors.isEmpty()) {
+            throw new IllegalArgumentException(String.join(", ", errors));
+        }
         projectRepository.create(project);
         loadProjectsIntoMap(); 
     }

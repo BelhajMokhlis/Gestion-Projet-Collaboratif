@@ -1,4 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.time.LocalDate" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="java.util.List" %>
+<%@ page import="model.Team" %>
+
 <html>
 <head>
     <title>Add New Project</title>
@@ -19,7 +25,8 @@
         </div>
         <div class="form-group">
             <label for="startDate">Start Date</label>
-            <input type="date" class="form-control" id="startDate" name="startDate" required>
+            <input type="date" class="form-control" id="startDate" name="startDate" 
+                value="<%= LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE) %>" required>
         </div>
         <div class="form-group">
             <label for="endDate">End Date</label>
@@ -35,13 +42,18 @@
                 <option value="CANCELED">Canceled</option>
             </select>
         </div>
+          <!-- Team ID Input -->
         <div class="form-group">
-   	 		<label for="team_id">Team ID</label>
-    		<input type="number" class="form-control" id="team_id" name="team_id" required>
-		</div>
+            <label for="teamId">Team:</label>
+            <select class="form-control" id="teamId" name="teamId" required>
+                <c:forEach var="team" items="${teams}">
+                    <option value="${team.id}">${team.name}</option>
+                </c:forEach>
+            </select>
+        </div>
 
         <button type="submit" class="btn btn-primary">Add Project</button>
-        <a href="projectList.jsp" class="btn btn-secondary">Back to Project List</a>
+        <a href="ProjectsServlet?action=list" class="btn btn-secondary">Back to Project List</a>
     </form>
 </div>
 
