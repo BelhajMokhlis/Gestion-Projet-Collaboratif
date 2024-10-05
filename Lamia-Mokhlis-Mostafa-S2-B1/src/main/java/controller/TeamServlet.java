@@ -114,7 +114,12 @@ public class TeamServlet extends HttpServlet {
         team.setId(id);
         team.setName(name);
         boolean update = teamService.updateTeam(team);
-        forwardToTeamsPage(request, response, update ? "Team updated successfully" : "Team not updated");
+        if (update) {
+            request.setAttribute("message", "Team updated successfully");
+        } else {
+            request.setAttribute("message", "Failed to update team");
+        }
+        getAllTeams(request, response);
     }
 
     // delete team
