@@ -23,13 +23,14 @@ public class MemberDaoImpl implements MemberDao {
 
     @Override
     public boolean addMember(Membre membre) {
-        String sql = "INSERT INTO member (lastName, firstName, email, role, team_id) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO `member`( `lastName`, `firstName`, `email`, `role`, `team_id`) VALUES (?,?,?,?,?)";
+        
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, membre.getLastName());
             pstmt.setString(2, membre.getFirstName());
             pstmt.setString(3, membre.getEmail());
             pstmt.setString(4, membre.getRole().toString());
-            pstmt.setInt(5, membre.getTeam().getId());
+            pstmt.setInt(5,membre.getTeam().getId()); 
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -51,14 +52,13 @@ public class MemberDaoImpl implements MemberDao {
 
     @Override
     public boolean updateMember(Membre membre) {
-        String sql = "UPDATE member SET lastName = ?, firstName = ?, email = ?, role = ?, team_id = ? WHERE id = ?";
+        String sql = "UPDATE member SET lastName = ?, firstName = ?, email = ?, role = ? WHERE id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, membre.getLastName());
             pstmt.setString(2, membre.getFirstName());
             pstmt.setString(3, membre.getEmail());
             pstmt.setString(4, membre.getRole().toString());
-            pstmt.setInt(5, membre.getTeam().getId());
-            pstmt.setInt(6, membre.getId());
+            pstmt.setInt(5, membre.getId());
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();

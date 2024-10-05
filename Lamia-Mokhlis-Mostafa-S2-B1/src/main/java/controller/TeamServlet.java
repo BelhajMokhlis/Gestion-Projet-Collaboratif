@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.Team;
+import model.enums.MemberRole;
 import model.Membre;
-import repository.impl.MemberRepositoryImpl;
 import service.MemberService;
 import service.TeamService;
 
@@ -41,12 +41,20 @@ public class TeamServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-      if (action == null) {
-        getAllTeams(request, response);
-      } else if (action.equals("team")) {
-        getTeam(request, response);
-      }
-             
+        switch (action == null ? "getAllTeams" : action) {
+            case "getAllTeams":
+                getAllTeams(request, response);
+                break;
+            case "team":
+                getTeam(request, response);
+                break;
+            case "viewMember":
+                showMember(request, response);
+                break;
+            default:
+                // Handle unexpected action or send an error response
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
+        }
     }
 
     /**
@@ -69,6 +77,15 @@ public class TeamServlet extends HttpServlet {
                 break;
             case "delete":
                 deleteTeam(request, response);
+                break;
+            case "addMember":
+                addMember(request, response);
+                break;
+            case "deleteMember":
+                deleteMember(request, response);
+                break;
+            case "editMember":
+                editMember(request, response);
                 break;
             default:
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
@@ -202,10 +219,103 @@ public class TeamServlet extends HttpServlet {
         request.getRequestDispatcher("/jsp/teams.jsp").forward(request, response);
     }
 
+    /**
+     * Adds a new member to a team.
+     *
+     * @param request  The HTTP request containing member and team data
+     * @param response The HTTP response
+     * @throws ServletException If a servlet-specific error occurs
+     * @throws IOException      If an I/O error occurs
+     */
+    public void addMember(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	Membre membre = new Membre();
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+        String email = request.getParameter("email");
+        MemberRole role = MemberRole.valueOf(request.getParameter("role"));
+        int teamId = Integer.parseInt(request.getParameter("teamId"));
+        String teamName = request.getParameter("teamName");
+        Team team = new Team();
+        team.setId(teamId);
+        team.setName(teamName);
+        membre.setFirstName(firstName);
+        membre.setLastName(lastName);
+        membre.setEmail(email);
+        membre.setRole(role);
+        membre.setTeam(team);
+        boolean add = memberService.addMember(membre);
+        if (add) {
+            request.setAttribute("message", "Member added successfully");
+        } else {
+            request.setAttribute("message", "Member not added");
+        }
+        response.sendRedirect(request.getContextPath() + "/teams?action=team&id=" + teamId);
+    }
 
+    public void deleteMember(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("memberId"));
+        int teamId = Integer.parseInt(request.getParameter("teamId"));
+        Membre membre = new Membre();
+        membre.setId(id);
+        boolean delete = memberService.removeMember(membre);
+        if (delete) {
+            request.setAttribute("message", "Member deleted successfully");
+        }else{
+            request.setAttribute("message", "Member not deleted");
+        }
+        response.sendRedirect(request.getContextPath() + "/teams?action=team&id=" + teamId);
 
-
+    }
 
     
-    
+
+    /*
+     * show member
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     * 
+     */
+    public void showMember(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Membre membre = memberService.getMember(id);
+        if (membre != null) {
+            request.setAttribute("membre", membre);
+            request.getRequestDispatcher("/jsp/member/showMember.jsp").forward(request, response);
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Member not found");
+        }
+    }
+
+    /*
+     * edit member  
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     * 
+     */
+    public void editMember(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // first get the member by id
+        int id = Integer.parseInt(request.getParameter("id"));
+        Membre membre = memberService.getMember(id);
+        // then update the member
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+        String email = request.getParameter("email");
+        MemberRole role = MemberRole.valueOf(request.getParameter("role"));
+        membre.setFirstName(firstName);
+        membre.setLastName(lastName);
+        membre.setEmail(email);
+        membre.setRole(role);
+        boolean update = memberService.updateMember(membre);
+        System.out.println(update);
+        if (update) {
+            request.setAttribute("message", "Member updated successfully");
+        } else {
+            request.setAttribute("message", "Member not updated");
+        }
+        response.sendRedirect(request.getContextPath() + "/teams?action=viewMember&id=" + id);
+    }
 }
