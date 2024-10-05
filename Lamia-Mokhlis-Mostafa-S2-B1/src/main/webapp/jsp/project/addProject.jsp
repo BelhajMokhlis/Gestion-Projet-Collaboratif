@@ -14,10 +14,16 @@
 <body>
 <div class="container">
     <h1 class="mt-5">Add New Project</h1>
+       <!-- Display Error Messages -->
+    <c:if test="${not empty errorMessage}">
+        <div class="alert alert-danger">
+            <strong>Error!</strong> ${errorMessage}
+        </div>
+    </c:if>
     <form action="${pageContext.request.contextPath}/ProjectsServlet?action=add" method="post">
         <div class="form-group">
             <label for="name">Project Name</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+            <input type="text" class="form-control" id="name" name="name" >
         </div>
         <div class="form-group">
             <label for="description">Description</label>

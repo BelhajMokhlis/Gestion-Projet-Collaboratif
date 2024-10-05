@@ -183,7 +183,7 @@ public class ProjectsServlet extends HttpServlet {
 		    response.sendRedirect(request.getContextPath() + "/ProjectsServlet?action=list");
 	}
 	
-	private void updateProject(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	private void updateProject(HttpServletRequest request, HttpServletResponse response) throws   ServletException, IOException  {
 	    int projectId = Integer.parseInt(request.getParameter("id")); 
 	    String name = request.getParameter("name");
 	    String description = request.getParameter("description");
@@ -201,22 +201,28 @@ public class ProjectsServlet extends HttpServlet {
 	        project.setEndDate(endDate != null && !endDate.isEmpty() ? LocalDate.parse(endDate) : null); 
 	        project.setStatus(ProjectStatus.valueOf(status)); 
 	        project.setTeamId(teamId);
-
-	        projectService.updateProject(project);
-
-	        response.sendRedirect(request.getContextPath() + "/ProjectsServlet?action=list");
+	        try {
+	            projectService.updateProject(project);
+	            response.sendRedirect(request.getContextPath() + "/ProjectsServlet?action=list");
+	        } catch (IllegalArgumentException e) {
+	            String errorMessage = e.getMessage();
+	            request.setAttribute("errorMessage", errorMessage);
+	            request.setAttribute("project", project); 
+	            RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/project/editProject.jsp"); 
+	            dispatcher.forward(request, response);
+	        }
 	    } else {
 	        response.sendError(HttpServletResponse.SC_NOT_FOUND, "Project not found");
 	    }
 	}
 
-	  private void addProject(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	  private void addProject(HttpServletRequest request, HttpServletResponse response) throws  ServletException, IOException {
     	  String name = request.getParameter("name");
     	    String description = request.getParameter("description");
     	    String startDate = request.getParameter("startDate");
     	    String endDate = request.getParameter("endDate");
     	    String status = request.getParameter("status");
-    	    int teamId = Integer.parseInt(request.getParameter("team_id")); 
+    	    int teamId = Integer.parseInt(request.getParameter("teamId")); 
 
     	    Project project = new Project();
     	    project.setName(name);
@@ -226,8 +232,14 @@ public class ProjectsServlet extends HttpServlet {
     	    project.setStatus(ProjectStatus.valueOf(status)); 
     	    project.setTeamId(teamId);
 
-    	     
-    	    projectService.createProject(project); 
-    	    response.sendRedirect(request.getContextPath() +"/jsp/project/projectList.jsp");
+    	    try {
+    	        projectService.createProject(project);
+        	    response.sendRedirect(request.getContextPath() +"/jsp/project/projectList.jsp");
+    	    } catch (IllegalArgumentException e) {
+    	        request.setAttribute("errorMessage", e.getMessage());
+    	        
+    	        RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/project/addProject.jsp");
+    	        dispatcher.forward(request, response);
+    	    }
     }
 }

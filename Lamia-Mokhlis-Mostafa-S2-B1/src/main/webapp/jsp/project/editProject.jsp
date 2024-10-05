@@ -12,7 +12,12 @@
 <body>
 <div class="container">
     <h1 class="mt-5">Update Project</h1>
-
+  <!-- Display Error Messages -->
+    <c:if test="${not empty errorMessage}">
+        <div class="alert alert-danger">
+            <strong>Error!</strong> ${errorMessage}
+        </div>
+    </c:if>
     <!-- Display validation errors or success messages -->
     <c:if test="${not empty msg}">
         <div class="alert alert-info">
@@ -27,12 +32,12 @@
 
         <div class="form-group">
             <label for="name">Project Name:</label>
-            <input type="text" class="form-control" id="name" name="name" value="${project.name}" required>
+            <input type="text" class="form-control" id="name" name="name" value="${project.name}" >
         </div>
 
         <div class="form-group">
             <label for="description">Project Description:</label>
-            <textarea class="form-control" id="description" name="description" rows="3" required>${project.description}</textarea>
+            <textarea class="form-control" id="description" name="description" rows="3" >${project.description}</textarea>
         </div>
 
         <div class="form-group">
