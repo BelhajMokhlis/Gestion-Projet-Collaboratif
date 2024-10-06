@@ -151,5 +151,6 @@ Ce projet a été développé par une équipe d'étudiants :
 
 ## Liens
 - [Dépôt GitHub](https://github.com/BelhajMokhlis/Gestion-Projet-Collaboratif)
+- [Maquette Figma](https://www.figma.com/design/l4rcFCZMuQOqWXFlCdEZTS/gestProjet?node-id=0-1&node-type=canvas&t=nPrejUxfz3BIfkO7-0)
 
 
