@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,15 +18,18 @@ import service.TeamService;
 
 /**
  * Servlet implementation class ProjectsServlet
+ * This servlet handles various operations related to projects, including listing, creating, editing, viewing, searching, and managing project statistics.
  */
-
 public class ProjectsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	 /** The service for handling project-related operations. */
 	 private ProjectService projectService;
+	 /** The service for handling team-related operations. */
 	 private TeamService teamService;
 
     /**
-     * @see HttpServlet#HttpServlet()
+     * Default constructor for ProjectsServlet.
+     * Initializes the ProjectService and TeamService.
      */
     public ProjectsServlet() {
     	this.projectService=new ProjectService();
@@ -35,7 +37,12 @@ public class ProjectsServlet extends HttpServlet {
     }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * Handles GET requests for project-related actions.
+	 *
+	 * @param request the HttpServletRequest object
+	 * @param response the HttpServletResponse object
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException if an I/O error occurs
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -59,6 +66,15 @@ public class ProjectsServlet extends HttpServlet {
 	
 	
 
+
+	/**
+	 * Handles POST requests for project-related actions.
+	 *
+	 * @param request  the HttpServletRequest object containing the client's request
+	 * @param response the HttpServletResponse object for sending the response
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException      if an I/O error occurs
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		  String action = request.getParameter("action");
 
@@ -71,15 +87,34 @@ public class ProjectsServlet extends HttpServlet {
 	        }
 	}
 	
-	private void handleCreateProject(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+	/**
+	 * Handles the request to create a new project.
+	 * This method prepares the necessary data for the project creation form
+	 * and forwards the request to the appropriate JSP page.
+	 *
+	 * @param request  the HttpServletRequest object containing the client's request
+	 * @param response the HttpServletResponse object for sending the response
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException      if an I/O error occurs during request processing
+	 */
+	private void handleCreateProject(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("teams", teamService.getAllTeams());
         RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/project/addProject.jsp");
         dispatcher.forward(request, response);
 		
 	}
 	
+	/**
+	 * Handles the editing of an existing project.
+	 * Retrieves the project by ID, sets it as an attribute along with the list of teams,
+	 * and forwards the request to the edit project JSP page.
+	 *
+	 * @param request  the HttpServletRequest object
+	 * @param response the HttpServletResponse object
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException      if an I/O error occurs
+	 */
 	private void handleEditProject(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         String projectIdParam = request.getParameter("id");
           int  projectId = Integer.parseInt(projectIdParam);
        
@@ -92,6 +127,16 @@ public class ProjectsServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 	
+	/**
+	 * Displays project statistics.
+	 * Retrieves task counts, member counts, and all projects,
+	 * sets them as attributes, and forwards to the project stats JSP page.
+	 *
+	 * @param request  the HttpServletRequest object
+	 * @param response the HttpServletResponse object
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException      if an I/O error occurs
+	 */
 	private void showProjectStats(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    ProjectService projectService = new ProjectService();
 	    Map<Integer, Integer> taskCounts = projectService.getTaskCountForEachProject();
@@ -106,15 +151,33 @@ public class ProjectsServlet extends HttpServlet {
 	}
 
 	
-	private void searchProjects(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		 	String title = request.getParameter("title");
-		    List<Project> searchResults = projectService.searchProjectsByTitle(title);
-		    request.setAttribute("projects", searchResults);
-		    RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/project/projectList.jsp");
-		    dispatcher.forward(request, response); 			
+	/**
+	 * Searches for projects based on the provided title.
+	 * Retrieves search results and forwards them to the project list JSP page.
+	 *
+	 * @param request  the HttpServletRequest object
+	 * @param response the HttpServletResponse object
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException      if an I/O error occurs
+	 */
+	private void searchProjects(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String title = request.getParameter("title");
+	    List<Project> searchResults = projectService.searchProjectsByTitle(title);
+	    request.setAttribute("projects", searchResults);
+	    RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/project/projectList.jsp");
+	    dispatcher.forward(request, response); 			
 	}
-	         
-	private void viewProjectDetails(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException  {
+	
+	/**
+	 * Retrieves and displays details of a specific project.
+	 * Forwards the project details to the project details JSP page.
+	 *
+	 * @param request  the HttpServletRequest object
+	 * @param response the HttpServletResponse object
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException      if an I/O error occurs
+	 */
+	private void viewProjectDetails(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int projectId = Integer.parseInt(request.getParameter("id"));
 	    Project project = projectService.findProjectById(projectId);
 
@@ -127,6 +190,13 @@ public class ProjectsServlet extends HttpServlet {
 	}
 	
 	
+	/**
+	 * Handles the request to list projects with pagination.
+	 * Retrieves a page of projects and forwards them to the project list JSP page.
+	 *
+	 * @param request  the HttpServletRequest object
+	 * @param response the HttpServletResponse object
+	 */
 	private void handleProjectList(HttpServletRequest request, HttpServletResponse response) {
 		 try {
 		        int page = 1; 
@@ -163,6 +233,14 @@ public class ProjectsServlet extends HttpServlet {
 	 */
 
 
+	/**
+	 * Handles the deletion of a project.
+	 * Deletes the project with the specified ID and redirects to the project list.
+	 *
+	 * @param request  the HttpServletRequest object
+	 * @param response the HttpServletResponse object
+	 * @throws IOException if an I/O error occurs
+	 */
 	private void handleDeleteProject(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		 String idStr = request.getParameter("id");
 		    if (idStr != null) {
@@ -180,7 +258,16 @@ public class ProjectsServlet extends HttpServlet {
 		    response.sendRedirect(request.getContextPath() + "/ProjectsServlet?action=list");
 	}
 	
-	private void updateProject(HttpServletRequest request, HttpServletResponse response) throws   ServletException, IOException  {
+	/**
+	 * Updates an existing project with the provided information.
+	 * Validates the input and either updates the project or displays error messages.
+	 *
+	 * @param request  the HttpServletRequest object
+	 * @param response the HttpServletResponse object
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException      if an I/O error occurs
+	 */
+	private void updateProject(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    int projectId = Integer.parseInt(request.getParameter("id")); 
 	    String name = request.getParameter("name");
 	    String description = request.getParameter("description");
@@ -213,30 +300,39 @@ public class ProjectsServlet extends HttpServlet {
 	    }
 	}
 
-	  private void addProject(HttpServletRequest request, HttpServletResponse response) throws  ServletException, IOException {
-    	  String name = request.getParameter("name");
-    	    String description = request.getParameter("description");
-    	    String startDate = request.getParameter("startDate");
-    	    String endDate = request.getParameter("endDate");
-    	    String status = request.getParameter("status");
-    	    int teamId = Integer.parseInt(request.getParameter("teamId")); 
+	  /**
+	   * Adds a new project with the provided information.
+	   * Validates the input and either creates the project or displays error messages.
+	   *
+	   * @param request  the HttpServletRequest object
+	   * @param response the HttpServletResponse object
+	   * @throws ServletException if a servlet-specific error occurs
+	   * @throws IOException      if an I/O error occurs
+	   */
+	  private void addProject(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		  String name = request.getParameter("name");
+		  String description = request.getParameter("description");
+		  String startDate = request.getParameter("startDate");
+		  String endDate = request.getParameter("endDate");
+		  String status = request.getParameter("status");
+		  int teamId = Integer.parseInt(request.getParameter("teamId")); 
 
-    	    Project project = new Project();
-    	    project.setName(name);
-    	    project.setDescription(description);
-    	    project.setStartDate(LocalDate.parse(startDate));
-    	    project.setEndDate(endDate != null && !endDate.isEmpty() ? LocalDate.parse(endDate) : null); 
-    	    project.setStatus(ProjectStatus.valueOf(status)); 
-    	    project.setTeamId(teamId);
+		  Project project = new Project();
+		  project.setName(name);
+		  project.setDescription(description);
+		  project.setStartDate(LocalDate.parse(startDate));
+		  project.setEndDate(endDate != null && !endDate.isEmpty() ? LocalDate.parse(endDate) : null); 
+		  project.setStatus(ProjectStatus.valueOf(status)); 
+		  project.setTeamId(teamId);
 
-    	    try {
-    	        projectService.createProject(project);
-        	    response.sendRedirect(request.getContextPath() +"/jsp/project/projectList.jsp");
-    	    } catch (IllegalArgumentException e) {
-    	        request.setAttribute("errorMessage", e.getMessage());
-    	        
-    	        RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/project/addProject.jsp");
-    	        dispatcher.forward(request, response);
-    	    }
-    }
+		  try {
+			  projectService.createProject(project);
+			  response.sendRedirect(request.getContextPath() +"/jsp/project/projectList.jsp");
+		  } catch (IllegalArgumentException e) {
+			  request.setAttribute("errorMessage", e.getMessage());
+			  
+			  RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/project/addProject.jsp");
+			  dispatcher.forward(request, response);
+		  }
+	  }
 }

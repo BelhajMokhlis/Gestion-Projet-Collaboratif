@@ -7,6 +7,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+ * Singleton class for managing database connections.
+ * This class provides methods to establish, retrieve, and close database connections.
+ */
 public class DatabaseConnection {
 
 	private static DatabaseConnection instance;
@@ -15,6 +19,10 @@ public class DatabaseConnection {
 	private String username;
 	private String password;
 
+	/**
+	 * Private constructor to prevent instantiation.
+	 * Loads configuration and establishes a database connection.
+	 */
 	private DatabaseConnection() {
 		loadConfig();
 		try {
@@ -28,7 +36,9 @@ public class DatabaseConnection {
 		}
 	}
 
-
+	/**
+	 * Loads database configuration from a properties file.
+	 */
 	private void loadConfig() {
 		Properties prop = new Properties();
 		try (InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties")) {
@@ -45,17 +55,30 @@ public class DatabaseConnection {
 		}
 	}
 
+	/**
+	 * Returns the database connection.
+	 *
+	 * @return The Connection object representing the database connection.
+	 */
 	public Connection getConnection() {
 		return connection;
 	}
 
-	public static DatabaseConnection getInstance()  {
-		if (instance == null ) {
+	/**
+	 * Returns the singleton instance of DatabaseConnection.
+	 *
+	 * @return The DatabaseConnection instance.
+	 */
+	public static DatabaseConnection getInstance() {
+		if (instance == null) {
 			instance = new DatabaseConnection();
 		}
 		return instance;
 	}
 
+	/**
+	 * Closes the database connection.
+	 */
 	public void closeConnection() {
 		if (connection != null) {
 			try {

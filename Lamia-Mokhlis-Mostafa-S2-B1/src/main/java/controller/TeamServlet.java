@@ -257,6 +257,14 @@ public class TeamServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/teams?action=team&id=" + teamId);
     }
 
+    /**
+     * Deletes a member from a team.
+     *
+     * @param request  The HTTP request containing the member ID and team ID
+     * @param response The HTTP response
+     * @throws ServletException If a servlet-specific error occurs
+     * @throws IOException      If an I/O error occurs
+     */
     public void deleteMember(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("memberId"));
         int teamId = Integer.parseInt(request.getParameter("teamId"));
@@ -272,15 +280,13 @@ public class TeamServlet extends HttpServlet {
 
     }
 
-    
-
-    /*
-     * show member
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
-     * 
+    /**
+     * Displays details of a specific member.
+     *
+     * @param request  The HTTP request containing the member ID
+     * @param response The HTTP response
+     * @throws ServletException If a servlet-specific error occurs
+     * @throws IOException      If an I/O error occurs
      */
     public void showMember(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
@@ -302,13 +308,13 @@ public class TeamServlet extends HttpServlet {
         }
     }
 
-    /*
-     * edit member  
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
-     * 
+    /**
+     * Edits an existing member's information.
+     *
+     * @param request  The HTTP request containing updated member data
+     * @param response The HTTP response
+     * @throws ServletException If a servlet-specific error occurs
+     * @throws IOException      If an I/O error occurs
      */
     public void editMember(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // first get the member by id

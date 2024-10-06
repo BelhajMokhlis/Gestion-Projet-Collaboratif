@@ -1,4 +1,3 @@
-
 package dao.impl;
 
 
@@ -18,9 +17,17 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of the TaskDAO interface for managing Task entities in the database.
+ */
 public class TaskDaoImpl implements TaskDAO {
     private final Connection connection = DatabaseConnection.getInstance().getConnection();
 
+    /**
+     * Creates a new task in the database.
+     *
+     * @param task The Task object to be created.
+     */
     @Override
     public void create(Task task) {
         String query = "INSERT INTO task (title, description, priority, status, creationDate, dueDate, project_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -40,6 +47,12 @@ public class TaskDaoImpl implements TaskDAO {
         }
     }
 
+    /**
+     * Retrieves a task from the database by its ID.
+     *
+     * @param taskID The ID of the task to retrieve.
+     * @return The Task object if found, null otherwise.
+     */
     @Override
     public Task read(int taskID) {
         String query = "SELECT * FROM task WHERE id = ?";
@@ -74,6 +87,11 @@ public class TaskDaoImpl implements TaskDAO {
         return task;
     }
 
+    /**
+     * Updates an existing task in the database.
+     *
+     * @param task The Task object with updated information.
+     */
     @Override
     public void update(Task task) {
         String query = "UPDATE task SET title = ?, description = ?, priority = ?, status = ?, creationDate = ?, dueDate = ?, member_id = ? WHERE id = ?";
@@ -94,6 +112,11 @@ public class TaskDaoImpl implements TaskDAO {
         }
     }
 
+    /**
+     * Deletes a task from the database by its ID.
+     *
+     * @param taskID The ID of the task to delete.
+     */
     @Override
     public void delete(int taskID) {
         String query = "DELETE FROM task WHERE id = ?";
@@ -106,6 +129,11 @@ public class TaskDaoImpl implements TaskDAO {
         }
     }
 
+    /**
+     * Retrieves all tasks from the database.
+     *
+     * @return A List of all Task objects in the database.
+     */
     @Override
     public List<Task> getAll() {
         List<Task> tasks = new ArrayList<>();

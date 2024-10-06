@@ -7,7 +7,6 @@ import java.sql.SQLException;
 
 import java.util.List;
 
-import dao.Interface.MemberDao; 
 import dao.Interface.TeamDAO;
 
 import java.util.ArrayList;
@@ -16,15 +15,26 @@ import model.Team;
 import util.DatabaseConnection;
 
 
+/**
+ * Implementation of the TeamDAO interface for database operations related to Team entities.
+ */
 public class TeamDAOImpl implements TeamDAO {
 
-    private  Connection connection;
+    private Connection connection;
 
+    /**
+     * Constructs a new TeamDAOImpl and initializes the database connection.
+     */
     public TeamDAOImpl() {
         this.connection = DatabaseConnection.getInstance().getConnection();
-      
     }
 
+    /**
+     * Adds a new team to the database.
+     *
+     * @param team The Team object to be added.
+     * @return true if the team was successfully added, false otherwise.
+     */
     @Override
     public boolean addTeam(Team team) {
         String sql = "INSERT INTO team (name) VALUES (?)";
@@ -48,6 +58,12 @@ public class TeamDAOImpl implements TeamDAO {
         }
     }
 
+    /**
+     * Removes a team from the database.
+     *
+     * @param team The Team object to be removed.
+     * @return true if the team was successfully removed, false otherwise.
+     */
     @Override
     public boolean removeTeam(Team team) {
         String sql = "DELETE FROM team WHERE id = ?";
@@ -61,6 +77,12 @@ public class TeamDAOImpl implements TeamDAO {
         }
     }
 
+    /**
+     * Updates an existing team in the database.
+     *
+     * @param team The Team object with updated information.
+     * @return true if the team was successfully updated, false otherwise.
+     */
     @Override
     public boolean updateTeam(Team team) {
         String sql = "UPDATE team SET name = ? WHERE id = ?";
@@ -75,6 +97,12 @@ public class TeamDAOImpl implements TeamDAO {
         }
     }
 
+    /**
+     * Retrieves a team from the database by its ID.
+     *
+     * @param id The ID of the team to retrieve.
+     * @return The Team object if found, null otherwise.
+     */
     @Override
     public Team getTeam(int id) {
         String sql = "SELECT * FROM team WHERE id = ?";
@@ -99,6 +127,11 @@ public class TeamDAOImpl implements TeamDAO {
       
     
 
+    /**
+     * Retrieves all teams from the database.
+     *
+     * @return A List of all Team objects in the database.
+     */
     @Override
     public List<Team> getAllTeams() {
         String sql = "SELECT * FROM team";

@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class TaskServlet
  */
-//@WebServlet("/")
 public class TaskServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final TaskService taskService;
@@ -33,14 +32,20 @@ public class TaskServlet extends HttpServlet {
 
 
     /**
-     * @see HttpServlet#HttpServlet()
+     * Default constructor for TaskServlet.
+     * Initializes the TaskService.
      */
     public TaskServlet() {
         this.taskService = new TaskService();
     }
 
     /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     * Handles GET requests for task-related actions.
+     *
+     * @param request  The HttpServletRequest object.
+     * @param response The HttpServletResponse object.
+     * @throws ServletException If a servlet-specific error occurs.
+     * @throws IOException      If an I/O error occurs.
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -63,7 +68,12 @@ public class TaskServlet extends HttpServlet {
     }
 
     /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     * Handles POST requests for task-related actions.
+     *
+     * @param request  The HttpServletRequest object.
+     * @param response The HttpServletResponse object.
+     * @throws ServletException If a servlet-specific error occurs.
+     * @throws IOException      If an I/O error occurs.
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -91,6 +101,14 @@ public class TaskServlet extends HttpServlet {
         }
     }
     
+    /**
+     * Prepares and forwards the request to the task creation form.
+     *
+     * @param request  The HttpServletRequest object.
+     * @param response The HttpServletResponse object.
+     * @throws ServletException If a servlet-specific error occurs.
+     * @throws IOException      If an I/O error occurs.
+     */
     private void createTaskForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         int projectID = Integer.parseInt(request.getParameter("projectID"));
@@ -102,6 +120,14 @@ public class TaskServlet extends HttpServlet {
     }
 
 
+    /**
+     * Handles the insertion of a new task.
+     *
+     * @param request  The HttpServletRequest object.
+     * @param response The HttpServletResponse object.
+     * @throws ServletException If a servlet-specific error occurs.
+     * @throws IOException      If an I/O error occurs.
+     */
     private void insertTask(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     	
@@ -145,6 +171,14 @@ public class TaskServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Prepares and forwards the request to the task editing form.
+     *
+     * @param request  The HttpServletRequest object.
+     * @param response The HttpServletResponse object.
+     * @throws ServletException If a servlet-specific error occurs.
+     * @throws IOException      If an I/O error occurs.
+     */
     private void editTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int taskID = Integer.parseInt(request.getParameter("taskID"));
 
@@ -156,6 +190,14 @@ public class TaskServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
+    /**
+     * Handles the update of an existing task.
+     *
+     * @param request  The HttpServletRequest object.
+     * @param response The HttpServletResponse object.
+     * @throws ServletException If a servlet-specific error occurs.
+     * @throws IOException      If an I/O error occurs.
+     */
     private void updateTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         int taskID = Integer.parseInt(request.getParameter("taskID"));
@@ -188,6 +230,14 @@ public class TaskServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/tasks?action=list&projectID=" + task.getProject().getId());
     }
 
+    /**
+     * Handles the deletion of a task.
+     *
+     * @param request  The HttpServletRequest object.
+     * @param response The HttpServletResponse object.
+     * @throws ServletException If a servlet-specific error occurs.
+     * @throws IOException      If an I/O error occurs.
+     */
     private void deleteTask(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         int taskID = Integer.parseInt(request.getParameter("taskID"));
@@ -201,6 +251,14 @@ public class TaskServlet extends HttpServlet {
         }
     }
     
+    /**
+     * Handles the assignment of a member to a task.
+     *
+     * @param request  The HttpServletRequest object.
+     * @param response The HttpServletResponse object.
+     * @throws ServletException If a servlet-specific error occurs.
+     * @throws IOException      If an I/O error occurs.
+     */
     private void assignMember(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int taskID = Integer.parseInt(request.getParameter("taskID"));
         String memberIDStr = request.getParameter("memberID");
@@ -222,6 +280,14 @@ public class TaskServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/tasks?action=list&projectID=" + projectID);
     }
 
+    /**
+     * Retrieves and displays a paginated list of tasks for a project.
+     *
+     * @param request  The HttpServletRequest object.
+     * @param response The HttpServletResponse object.
+     * @throws ServletException If a servlet-specific error occurs.
+     * @throws IOException      If an I/O error occurs.
+     */
     private void listTasks(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int projectID = Integer.parseInt(request.getParameter("projectID"));
         int page = 1;
@@ -253,6 +319,14 @@ public class TaskServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
     
+    /**
+     * Handles the update of a task's status.
+     *
+     * @param request  The HttpServletRequest object.
+     * @param response The HttpServletResponse object.
+     * @throws ServletException If a servlet-specific error occurs.
+     * @throws IOException      If an I/O error occurs.
+     */
     private void updateTaskStatus(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int taskID = Integer.parseInt(request.getParameter("taskID"));
         String statusStr = request.getParameter("status");
