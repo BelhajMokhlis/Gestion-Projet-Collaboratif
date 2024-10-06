@@ -19,8 +19,7 @@ public class Task {
     public Task() {
     }
 
-    public Task(int taskID, String title, String description, TaskPriority priority, TaskStatus status, LocalDate creationDate, LocalDate dueDate, Project project, Membre member) {
-        this.taskID = taskID;
+    public Task( String title, String description, TaskPriority priority, TaskStatus status, LocalDate creationDate, LocalDate dueDate, Project project, Membre member) {
         this.title = title;
         this.description = description;
         this.priority = priority;
@@ -29,6 +28,15 @@ public class Task {
         this.dueDate = dueDate;
         this.project = project;
         this.member = member;
+    }
+    public Task(String title, String description, TaskPriority priority, TaskStatus status, LocalDate creationDate, LocalDate dueDate,Project project) {
+        this.title = title;
+        this.description = description;
+        this.priority = priority;
+        this.status = status;
+        this.creationDate = creationDate;
+        this.dueDate = dueDate;
+        this.project = project;
     }
 
     public int getTaskID() {
